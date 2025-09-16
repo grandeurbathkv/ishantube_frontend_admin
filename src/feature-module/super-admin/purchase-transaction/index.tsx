@@ -259,7 +259,7 @@ const PurchaseTransaction = () => {
                 <div className="col-md-6">
                   <div className="mb-4">
                     <img
-                      src="assets/img/logo.svg"
+                      src="assets/img/logo.png"
                       className="img-fluid"
                       alt="logo"
                     />

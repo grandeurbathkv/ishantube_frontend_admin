@@ -31,7 +31,7 @@ const Signin: React.FC = () => {
                   <div className="login-userheading">
                     <h3>Sign In</h3>
                     <h4 className="fs-16">
-                      Access the Dreamspos panel using your email and passcode.
+                      Access Grandeur Bath v2.0 with email & passcode.
                     </h4>
                   </div>
                   <div className="mb-3">
@@ -76,14 +76,14 @@ const Signin: React.FC = () => {
                             Remember me
                           </label>
                         </div>
-                        <div className="text-end">
+                        {/* <div className="text-end">
                           <Link
                             className="text-orange fs-16 fw-medium"
                             to={route.forgotPassword}
                           >
                             Forgot Password?
                           </Link>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
@@ -95,7 +95,7 @@ const Signin: React.FC = () => {
                       Sign In
                     </Link>
                   </div>
-                  <div className="signinform">
+                  {/* <div className="signinform">
                     <h4>
                       New on our platform?
                       <Link to={route.register} className="hover-a">
@@ -103,11 +103,11 @@ const Signin: React.FC = () => {
                         Create an account
                       </Link>
                     </h4>
-                  </div>
-                  <div className="form-setlogin or-text">
+                  </div> */}
+                  {/* <div className="form-setlogin or-text">
                     <h4>OR</h4>
-                  </div>
-                  <div className="mt-2">
+                  </div> */}
+                  {/* <div className="mt-2">
                     <div className="d-flex align-items-center justify-content-center flex-wrap">
                       <div className="text-center me-2 flex-fill">
                         <Link
@@ -146,9 +146,9 @@ const Signin: React.FC = () => {
                         </Link>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="my-4 d-flex justify-content-center align-items-center copyright-text">
-                    <p>Copyright © 2025 DreamsPOS</p>
+                    <p>Copyright © 2025 Grandeur Bath v2.0</p>
                   </div>
                 </div>
               </form>
