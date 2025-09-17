@@ -1,17 +1,46 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { all_routes } from "../../../../routes/all_routes";
 import { appleLogo, facebookLogo, googleLogo, logoPng, logoWhitePng } from "../../../../utils/imagepath";
-
+import { loginUser } from "../../../../core/redux/authSlice";
+// import { RootState, AppDispatch } from "../../../../core/redux/store";
+import type { RootState, AppDispatch } from "@/core/redux/store";
 
 const Signin: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isPasswordVisible, setPasswordVisible] = useState<boolean>(false);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const route = all_routes;
+
+  const { loading, userInfo, error, success } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   const togglePasswordVisibility = (): void => {
     setPasswordVisible((prevState: boolean) => !prevState);
   };
 
-  const route = all_routes;
+  useEffect(() => {
+    // Redirect if login is successful or user info already exists
+    if (success || userInfo) {
+      navigate(route.newdashboard);
+    }
+  }, [navigate, userInfo, success, route.newdashboard]);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email && password) {
+      const loginData = {
+        "Email id": email,
+        Password: password,
+      };
+      dispatch(loginUser(loginData));
+    }
+  };
 
   return (
     <>
@@ -20,7 +49,7 @@ const Signin: React.FC = () => {
         <div className="account-content">
           <div className="login-wrapper bg-img">
             <div className="login-content authent-content">
-              <form>
+              <form onSubmit={handleLogin}>
                 <div className="login-userset">
                   <div className="login-logo logo-normal">
                     <img src={logoPng} alt="img" />
@@ -34,15 +63,22 @@ const Signin: React.FC = () => {
                       Access Grandeur Bath v2.0 with email & passcode.
                     </h4>
                   </div>
+                  {error && (
+                    <div className="alert alert-danger" role="alert">
+                      {error}
+                    </div>
+                  )}
                   <div className="mb-3">
                     <label className="form-label">
                       Email <span className="text-danger"> *</span>
                     </label>
                     <div className="input-group">
                       <input
-                        type="text"
-                        defaultValue=""
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         className="form-control border-end-0"
+                        required
                       />
                       <span className="input-group-text border-start-0">
                         <i className="ti ti-mail" />
@@ -57,11 +93,13 @@ const Signin: React.FC = () => {
                       <input
                         type={isPasswordVisible ? "text" : "password"}
                         className="pass-input form-control"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
                       />
                       <span
-                        className={`ti toggle-password text-gray-9 ${
-                          isPasswordVisible ? "ti-eye" : "ti-eye-off"
-                        }`}
+                        className={`ti toggle-password text-gray-9 ${isPasswordVisible ? "ti-eye" : "ti-eye-off"
+                          }`}
                         onClick={togglePasswordVisibility}
                       ></span>
                     </div>
@@ -88,12 +126,13 @@ const Signin: React.FC = () => {
                     </div>
                   </div>
                   <div className="form-login">
-                    <Link
-                      to={route.newdashboard}
+                    <button
+                      type="submit"
                       className="btn btn-primary w-100"
+                      disabled={loading}
                     >
-                      Sign In
-                    </Link>
+                      {loading ? "Signing In..." : "Sign In"}
+                    </button>
                   </div>
                   {/* <div className="signinform">
                     <h4>
@@ -106,7 +145,7 @@ const Signin: React.FC = () => {
                   </div> */}
                   {/* <div className="form-setlogin or-text">
                     <h4>OR</h4>
-                  </div> */}
+                  </div> 
                   {/* <div className="mt-2">
                     <div className="d-flex align-items-center justify-content-center flex-wrap">
                       <div className="text-center me-2 flex-fill">

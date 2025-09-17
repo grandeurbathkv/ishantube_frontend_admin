@@ -9,6 +9,7 @@ export const SidebarData = [
     submenuOpen: true,
     showSubRoute: false,
     submenuHdr: "Main",
+    roles: ['Super Admin', 'Admin', 'Marketing', 'Dispatch head', 'Store Head', 'Transport Manager', 'Accountant', 'Document Manager', 'Guest',],
     submenuItems: [
       {
         label: "Dashboard",
@@ -17,26 +18,26 @@ export const SidebarData = [
         showSubRoute: false,
 
         submenuItems: [
-          { label: "Admin Dashboard", link: "/index" },
-          { label: "Admin Dashboard 2", link: "/admin-dashboard" },
-          { label: "Sales Dashboard", link: "/sales-dashboard" },
+          { label: "Admin Dashboard", link: "/index", roles: ['Super Admin'], },
+          { label: "Admin Dashboard 2", link: "/admin-dashboard", roles: ['Super Admin', 'Admin',], },
+          { label: "Sales Dashboard", link: "/sales-dashboard", roles: ['Super Admin', 'Admin', 'Marketing', 'Dispatch head', 'Store Head', 'Transport Manager', 'Accountant', 'Document Manager', 'Guest',], },
         ],
       },
-      {
-        label: "Super Admin",
-        icon: 'user-edit',
-        submenu: true,
-        showSubRoute: false,
+      // {
+      //   label: "Super Admin",
+      //   icon: 'user-edit',
+      //   submenu: true,
+      //   showSubRoute: false,
 
-        submenuItems: [
-          { label: "Dashboard", link: "/dashboard" },
-          { label: "Companies", link: "/companies" },
-          { label: "Subscriptions", link: "/subscription" },
-          { label: "Packages", link: "/packages" },
-          { label: "Domain", link: "/domain" },
-          { label: "Purchase Transaction", link: route.purchasetransaction },
-        ],
-      },
+      //   submenuItems: [
+      //     { label: "Dashboard", link: "/dashboard" },
+      //     { label: "Companies", link: "/companies" },
+      //     { label: "Subscriptions", link: "/subscription" },
+      //     { label: "Packages", link: "/packages" },
+      //     { label: "Domain", link: "/domain" },
+      //     { label: "Purchase Transaction", link: route.purchasetransaction },
+      //   ],
+      // },
       // {
       //   label: "Application",
       //   icon: 'brand-apple-arcade',
@@ -100,6 +101,7 @@ export const SidebarData = [
     submenuOpen: true,
     showSubRoute: false,
     submenuHdr: "People",
+    roles: ['Super Admin', 'Admin', 'Marketing',],
 
     submenuItems: [
       {
@@ -144,6 +146,7 @@ export const SidebarData = [
     submenuOpen: true,
     showSubRoute: false,
     submenuHdr: "Inventory",
+    roles: ['Super Admin', 'Admin', 'Store Head', 'Accountant',],
     submenuItems: [
       {
         label: "Products",
@@ -231,78 +234,45 @@ export const SidebarData = [
       },
     ],
   },
- {
+  {
     label: "Quotation",
     submenuOpen: true,
-    submenuHdr: "Sales",
+    submenuHdr: "Quotation",
     submenu: false,
     showSubRoute: false,
+    roles: ['Super Admin', 'Admin', 'Marketing',],
     submenuItems: [
-      {
-        label: "Quotation",
-        icon: 'layout-grid',
-        showSubRoute: false,
-        submenu: true,
-        submenuItems: [
-          { label: "Online Orders", link: route.onlineorder, showSubRoute: false },
-          { label: "POS Orders", link: route.posorder, showSubRoute: false },
-        ],
-      },
+      { label: "Create Quotation", icon: 'files', link: route.onlineorder, showSubRoute: false },
+      { label: "Quotation List", icon: 'files', link: route.posorder, showSubRoute: false },
     ],
   },
-  // {
-  //   label: "Stock",
-  //   submenuOpen: true,
-  //   submenuHdr: "Stock",
-  //   submenu: true,
-  //   showSubRoute: false,
-  //   submenuItems: [
-  //     {
-  //       label: "Manage Stock",
-  //       link: "/manage-stocks",
-  //       icon: 'stack-3',
-  //       showSubRoute: false,
-  //       submenu: false,
-  //     },
-  //     {
-  //       label: "Stock Adjustment",
-  //       link: "/stock-adjustment",
-  //       icon: 'stairs-up',
-  //       showSubRoute: false,
-  //       submenu: false,
-  //     },
-  //     {
-  //       label: "Stock Transfer",
-  //       link: "/stock-transfer",
-  //       icon: 'stack-pop',
-  //       showSubRoute: false,
-  //       submenu: false,
-  //     },
-  //   ],
-  // },
   {
     label: "Sales",
     submenuOpen: true,
     submenuHdr: "Sales",
     submenu: false,
     showSubRoute: false,
+    roles: ['Super Admin', 'Admin', 'Marketing', 'Dispatch head', 'Store Head', 'Accountant',],
     submenuItems: [
+      {
+        label: "Sales Order",
+        link: route.invoice,
+        icon: 'file-invoice',
+        showSubRoute: false,
+        submenu: false,
+        roles: ['Super Admin', 'Admin', 'Marketing', 'Dispatch head',],
+      },
       {
         label: "Sales",
         icon: 'layout-grid',
         showSubRoute: false,
         submenu: true,
+        roles: ['Super Admin', 'Admin', 'Store Head', 'Accountant',],
+
         submenuItems: [
-          { label: "Online Orders", link: route.onlineorder, showSubRoute: false },
-          { label: "POS Orders", link: route.posorder, showSubRoute: false },
+          { label: "Packaging", link: route.onlineorder, showSubRoute: false },
+          { label: "Sales", link: route.posorder, showSubRoute: false },
         ],
-      },
-      {
-        label: "Invoices",
-        link: route.invoice,
-        icon: 'file-invoice',
-        showSubRoute: false,
-        submenu: false,
       },
       {
         label: "Sales Return",
@@ -310,66 +280,61 @@ export const SidebarData = [
         icon: 'receipt-refund',
         showSubRoute: false,
         submenu: false,
+        roles: ['Super Admin', 'Admin', 'Marketing', 'Dispatch head', 'Store Head', 'Accountant',],
+
       },
+      // {
+      //   label: "Quotation",
+      //   link: "/quotation-list",
+      //   icon: 'files',
+      //   showSubRoute: false,
+      //   submenu: false,
+      // },
+      // {
+      //   label: "POS",
+      //   icon: 'device-laptop',
+      //   showSubRoute: false,
+      //   submenu: true,
+      //   submenuItems: [
+      //     { label: "POS 1", link: "/pos", showSubRoute: false },
+      //     { label: "POS 2", link: "/pos-2", showSubRoute: false },
+      //     { label: "POS 3", link: "/pos-3", showSubRoute: false },
+      //     { label: "POS 4", link: "/pos-4", showSubRoute: false },
+      //     { label: "POS 5", link: "/pos-5", showSubRoute: false },
+      //   ]
+      // },
+    ],
+  },
+  {
+    label: "Payments",
+    submenuOpen: true,
+    submenuHdr: "Payments",
+    showSubRoute: false,
+    roles: ['Super Admin', 'Admin', 'Marketing', 'Dispatch head', 'Accountant',],
+
+    submenuItems: [
       {
-        label: "Quotation",
-        link: "/quotation-list",
-        icon: 'files',
+        label: "Payments Received",
+        link: "/payments-received",
+        icon: 'cash-banknote',
         showSubRoute: false,
         submenu: false,
       },
       {
-        label: "POS",
-        icon: 'device-laptop',
+        label: "Payments Sent",
+        link: "/payments-sent",
+        icon: 'receipt-2',
         showSubRoute: false,
-        submenu: true,
-        submenuItems: [
-          { label: "POS 1", link: "/pos", showSubRoute: false },
-          { label: "POS 2", link: "/pos-2", showSubRoute: false },
-          { label: "POS 3", link: "/pos-3", showSubRoute: false },
-          { label: "POS 4", link: "/pos-4", showSubRoute: false },
-          { label: "POS 5", link: "/pos-5", showSubRoute: false },
-        ]
+        submenu: false,
       },
     ],
   },
-  // {
-  //   label: "Promo",
-  //   submenuOpen: true,
-  //   submenuHdr: "Promo",
-  //   showSubRoute: false,
-  //   submenuItems: [
-  //     {
-  //       label: "Coupons",
-  //       link: "/coupons",
-  //       icon: 'ticket',
-  //       showSubRoute: false,
-  //       submenu: false,
-  //     },
-  //     {
-  //       label: "Gift Cards",
-  //       link: route.GiftCard,
-  //       icon: 'cards',
-  //       showSubRoute: false,
-  //       submenu: false,
-  //     },
-  //     {
-  //       label: "Discount",
-  //       icon: 'file-percent',
-  //       showSubRoute: false,
-  //       submenu: true,
-  //       submenuItems: [
-  //         { label: "Discount Plan", link: route.discountPlan, showSubRoute: false },
-  //         { label: "Discount", link: route.discount, showSubRoute: false },
-  //       ]
-  //     },
-  //   ],
-  // },
   {
     label: "Purchases",
     submenuOpen: true,
     submenuHdr: "Purchases",
     showSubRoute: false,
+    roles: ['Super Admin', 'Admin', 'Marketing', 'Dispatch head', 'Store Head',],
     submenuItems: [
       {
         label: "Purchases Requition",
@@ -387,85 +352,149 @@ export const SidebarData = [
       },
     ],
   },
-
   {
-    label: "Finance & Accounts",
+    label: "Utilities",
     submenuOpen: true,
+    submenuHdr: "Utilities",
+    submenu: true,
     showSubRoute: false,
-    submenuHdr: "Finance & Accounts",
+    roles: ['Super Admin', 'Admin', 'Dispatch head', 'Store Head', 'Accountant',],
     submenuItems: [
       {
-        label: "Expenses",
-        submenu: true,
-        showSubRoute: false,
-        icon: 'file-stack',
-        submenuItems: [
-          { label: "Expenses", link: "/expense-list", showSubRoute: false },
-          {
-            label: "Expense Category",
-            link: "/expense-category",
-            showSubRoute: false,
-          },
-        ],
-      },
-      {
-        label: "Income",
-        submenu: true,
-        showSubRoute: false,
-        icon: 'file-pencil',
-        submenuItems: [
-          { label: "Income", link: "/income", showSubRoute: false },
-          {
-            label: "Income Category",
-            link: "/income-category",
-            showSubRoute: false,
-          },
-        ],
-      },
-      {
-        label: "Bank Accounts",
-        link: route.accountlist,
-        icon: 'building-bank',
+        label: "Manage Stock",
+        link: "/manage-stocks",
+        icon: 'stack-3',
         showSubRoute: false,
         submenu: false,
       },
       {
-        label: "Money Transfer",
-        link: "/money-transfer",
-        icon: 'moneybag',
+        label: "Stock journal",
+        link: "/stock-adjustment",
+        icon: 'stairs-up',
         showSubRoute: false,
         submenu: false,
       },
       {
-        label: "Balance Sheet",
-        link: "/balance-sheet",
-        icon: 'report-money',
-        showSubRoute: false,
-        submenu: false,
-      },
-      {
-        label: "Trial Balance",
-        link: "/trial-balance",
-        icon: 'alert-circle',
-        showSubRoute: false,
-        submenu: false,
-      },
-      {
-        label: "Cash Flow",
-        link: "/cash-flow",
-        icon: 'zoom-money',
-        showSubRoute: false,
-        submenu: false,
-      },
-      {
-        label: "Account Statement",
-        link: "/account-statement",
-        icon: 'file-infinity',
+        label: "Stock return",
+        link: "/stock-transfer",
+        icon: 'stack-pop',
         showSubRoute: false,
         submenu: false,
       },
     ],
   },
+  {
+    label: "Tasks",
+    submenuOpen: true,
+    submenuHdr: "Tasks",
+    showSubRoute: false,
+    roles: ['Super Admin', 'Accountant',],
+    submenuItems: [
+      {
+        label: "Task Board",
+        link: "/coupons",
+        icon: 'ticket',
+        showSubRoute: false,
+        submenu: false,
+      },
+      {
+        label: "My Tasks",
+        link: route.GiftCard,
+        icon: 'cards',
+        showSubRoute: false,
+        submenu: false,
+      },
+      {
+        label: "All Tasks",
+        icon: 'file-percent',
+        showSubRoute: false,
+        submenu: true,
+        submenuItems: [
+          { label: "Discount Plan", link: route.discountPlan, showSubRoute: false },
+          { label: "Discount", link: route.discount, showSubRoute: false },
+        ]
+      },
+    ],
+  },
+
+  // {
+  //   label: "Finance & Accounts",
+  //   submenuOpen: true,
+  //   showSubRoute: false,
+  //   submenuHdr: "Finance & Accounts",
+  //   submenuItems: [
+  //     {
+  //       label: "Expenses",
+  //       submenu: true,
+  //       showSubRoute: false,
+  //       icon: 'file-stack',
+  //       submenuItems: [
+  //         { label: "Expenses", link: "/expense-list", showSubRoute: false },
+  //         {
+  //           label: "Expense Category",
+  //           link: "/expense-category",
+  //           showSubRoute: false,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       label: "Income",
+  //       submenu: true,
+  //       showSubRoute: false,
+  //       icon: 'file-pencil',
+  //       submenuItems: [
+  //         { label: "Income", link: "/income", showSubRoute: false },
+  //         {
+  //           label: "Income Category",
+  //           link: "/income-category",
+  //           showSubRoute: false,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       label: "Bank Accounts",
+  //       link: route.accountlist,
+  //       icon: 'building-bank',
+  //       showSubRoute: false,
+  //       submenu: false,
+  //     },
+  //     {
+  //       label: "Money Transfer",
+  //       link: "/money-transfer",
+  //       icon: 'moneybag',
+  //       showSubRoute: false,
+  //       submenu: false,
+  //     },
+  //     {
+  //       label: "Balance Sheet",
+  //       link: "/balance-sheet",
+  //       icon: 'report-money',
+  //       showSubRoute: false,
+  //       submenu: false,
+  //     },
+  //     {
+  //       label: "Trial Balance",
+  //       link: "/trial-balance",
+  //       icon: 'alert-circle',
+  //       showSubRoute: false,
+  //       submenu: false,
+  //     },
+  //     {
+  //       label: "Cash Flow",
+  //       link: "/cash-flow",
+  //       icon: 'zoom-money',
+  //       showSubRoute: false,
+  //       submenu: false,
+  //     },
+  //     {
+  //       label: "Account Statement",
+  //       link: "/account-statement",
+  //       icon: 'file-infinity',
+  //       showSubRoute: false,
+  //       submenu: false,
+  //     },
+  //   ],
+  // },
 
   // {
   //   label: "HRM",
@@ -547,6 +576,7 @@ export const SidebarData = [
     submenuOpen: true,
     showSubRoute: false,
     submenuHdr: "Reports",
+    roles: ['Super Admin', 'Admin', 'Marketing', 'Dispatch head', 'Store Head', 'Transport Manager', 'Accountant', 'Document Manager', 'Guest',],
     submenuItems: [
       {
         label: "Sales Report",
@@ -593,7 +623,6 @@ export const SidebarData = [
       },
       {
         label: "Customer Report",
-
         icon: 'report',
         showSubRoute: false,
         submenu: true,
@@ -702,29 +731,29 @@ export const SidebarData = [
   //   ],
   // },
   {
-    label: "User Management",
+    label: "Chat System",
     submenuOpen: true,
     showSubRoute: false,
-    submenuHdr: "User Management",
+    submenuHdr: "Chat",
     submenuItems: [
       {
-        label: "Users",
+        label: "Chat",
         link: "/users",
         icon: 'shield-up',
         showSubRoute: false,
       },
-      {
-        label: "Roles & Permissions",
-        link: "/roles-permissions",
-        icon: 'jump-rope',
-        showSubRoute: false,
-      },
-      {
-        label: "Delete Account Request",
-        link: "/delete-account",
-        icon: 'trash-x',
-        showSubRoute: false,
-      },
+      // {
+      //   label: "Roles & Permissions",
+      //   link: "/roles-permissions",
+      //   icon: 'jump-rope',
+      //   showSubRoute: false,
+      // },
+      // {
+      //   label: "Delete Account Request",
+      //   link: "/delete-account",
+      //   icon: 'trash-x',
+      //   showSubRoute: false,
+      // },
     ],
   },
   // {
@@ -959,7 +988,7 @@ export const SidebarData = [
           },
         ],
       },
-      { 
+      {
         label: "System Settings",
         submenu: true,
         showSubRoute: false,

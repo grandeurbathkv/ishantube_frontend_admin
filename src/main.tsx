@@ -2,7 +2,8 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from "react-redux";
 import { PrimeReactProvider } from "primereact/api";
-import store from "./core/redux/store";
+// import store from "./core/redux/store";
+import { store } from "./core/redux/store";
 import AppRouter from "./app.router";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "../node_modules/@tabler/icons-webfont/dist/tabler-icons.css";

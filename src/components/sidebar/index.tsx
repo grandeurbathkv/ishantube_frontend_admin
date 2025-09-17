@@ -1,10 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { SidebarData } from "../../core/json/siderbar_data";
 // import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { all_routes } from "../../routes/all_routes";
 import { customer15, logo, logoSmall, logoWhite } from "../../utils/imagepath";
+import type { RootState, AppDispatch } from "@/core/redux/store";
+
+
+// Helper function to filter menu items based on role
+const filterMenuByRole = (menuData: any[], userRole: string | undefined): any[] => {
+  if (!userRole) return []; // If no role, show nothing
+
+  // Use reduce to build the new filtered array
+  return menuData.reduce((acc, item) => {
+    // An item is accessible if it has no roles array OR the user's role is included
+    const hasAccess = !item.roles || item.roles.includes(userRole);
+
+    if (hasAccess) {
+      // If the item has a submenu, recursively filter its children
+      if (item.submenuItems) {
+        const filteredSubmenu = filterMenuByRole(item.submenuItems, userRole);
+        // Only include the parent item if it has accessible children
+        if (filteredSubmenu.length > 0) {
+          acc.push({ ...item, submenuItems: filteredSubmenu });
+        }
+      } else {
+        // If it's a regular item with no submenu, just add it
+        acc.push(item);
+      }
+    }
+    return acc;
+  }, []);
+};
+
+
 const Sidebar = () => {
   const route = all_routes;
 
@@ -14,7 +44,16 @@ const Sidebar = () => {
   const [subOpen, setSubopen] = useState("");
   const [subsidebar, setSubsidebar] = useState("");
 
-  const toggleSidebar = (title:any) => {
+  // Get user info from Redux state
+  const { userInfo } = useSelector((state: RootState) => state.auth);
+  const userRole = userInfo?.Role;
+
+  // Filter the sidebar data based on the user's role
+  // useMemo ensures this only recalculates when the userRole changes
+  const accessibleMenu = useMemo(() => filterMenuByRole(SidebarData, userRole), [userRole]);
+
+
+  const toggleSidebar = (title: any) => {
     if (title == subOpen) {
       setSubopen("");
     } else {
@@ -22,7 +61,7 @@ const Sidebar = () => {
     }
   };
 
-  const toggleSubsidebar = (subitem:any) => {
+  const toggleSubsidebar = (subitem: any) => {
     if (subitem == subsidebar) {
       setSubsidebar("");
     } else {
@@ -37,9 +76,9 @@ const Sidebar = () => {
   };
 
   const { expandMenus } = useSelector(
-    (state:any) => state.themeSetting.expandMenus
+    (state: any) => state.themeSetting.expandMenus
   );
-  const dataLayout = useSelector((state:any) => state.themeSetting.dataLayout);
+  const dataLayout = useSelector((state: any) => state.themeSetting.dataLayout);
 
   const expandMenu = () => {
     document.body.classList.remove("expand-menu");
@@ -164,20 +203,20 @@ const Sidebar = () => {
             </div>
           </div>
         </>
-       <div data-simplebar="">
+        <div data-simplebar="">
           <div className="sidebar-inner ">
             <div id="sidebar-menu" className="sidebar-menu">
               <ul>
-                {SidebarData?.map((mainLabel:any, index:any) => (
+                {accessibleMenu?.map((mainLabel: any, index: any) => (
                   <li className="submenu-open" key={index}>
                     <h6 className="submenu-hdr">{mainLabel?.label}</h6>
                     <ul>
-                      {mainLabel?.submenuItems?.map((title:any, i:any) => {
-                        let link_array:any = [];
-                        title?.submenuItems?.map((link:any) => {
+                      {mainLabel?.submenuItems?.map((title: any, i: any) => {
+                        let link_array: any = [];
+                        title?.submenuItems?.map((link: any) => {
                           link_array.push(link?.link);
                           if (link?.submenu) {
-                            link?.submenuItems?.map((item:any) => {
+                            link?.submenuItems?.map((item: any) => {
                               link_array.push(item?.link);
                             });
                           }
@@ -188,23 +227,20 @@ const Sidebar = () => {
                           <React.Fragment key={i}>
                             {" "}
                             <li
-                              className={`submenu ${
-                                !title?.submenu &&
-                                Location.pathname === title?.link
+                              className={`submenu ${!title?.submenu &&
+                                  Location.pathname === title?.link
                                   ? "custom-active-hassubroute-false"
                                   : ""
-                              }`}
+                                }`}
                             >
                               <Link
                                 to={title?.link}
                                 onClick={() => toggleSidebar(title?.label)}
-                                className={`${
-                                  subOpen === title?.label ? "subdrop" : ""
-                                } ${
-                                  title?.links?.includes(Location.pathname)
+                                className={`${subOpen === title?.label ? "subdrop" : ""
+                                  } ${title?.links?.includes(Location.pathname)
                                     ? "active"
                                     : ""
-                                }`}
+                                  }`}
                               >
                                 <i className={`ti ti-${title.icon} me-2`}></i>
                                 <span className="custom-active-span">
@@ -222,25 +258,23 @@ const Sidebar = () => {
                                 }}
                               >
                                 {title?.submenuItems?.map(
-                                  (item:any, titleIndex:any) => (
+                                  (item: any, titleIndex: any) => (
                                     <li
                                       className="submenu submenu-two"
                                       key={titleIndex}
                                     >
                                       <Link
                                         to={item?.link}
-                                        className={`${
-                                          item?.submenuItems
-                                            ?.map((link:any) => link.link)
+                                        className={`${item?.submenuItems
+                                            ?.map((link: any) => link.link)
                                             .includes(Location.pathname) ||
-                                          item?.link === Location.pathname
+                                            item?.link === Location.pathname
                                             ? "active"
                                             : ""
-                                        } ${
-                                          subsidebar === item?.label
+                                          } ${subsidebar === item?.label
                                             ? "subdrop"
                                             : ""
-                                        }`}
+                                          }`}
                                         onClick={() =>
                                           toggleSubsidebar(item?.label)
                                         }
@@ -259,25 +293,23 @@ const Sidebar = () => {
                                         }}
                                       >
                                         {item?.submenuItems?.map(
-                                          (items:any, subIndex:any) => (
+                                          (items: any, subIndex: any) => (
                                             <li key={subIndex}>
                                               <Link
                                                 to={items?.link}
-                                                className={`${
-                                                  subsidebar === items?.label
+                                                className={`${subsidebar === items?.label
                                                     ? "submenu-two subdrop"
                                                     : "submenu-two"
-                                                } ${
-                                                  items?.submenuItems
-                                                    ?.map((link:any) => link.link)
+                                                  } ${items?.submenuItems
+                                                    ?.map((link: any) => link.link)
                                                     .includes(
                                                       Location.pathname
                                                     ) ||
-                                                  items?.link ===
+                                                    items?.link ===
                                                     Location.pathname
                                                     ? "active"
                                                     : ""
-                                                }`}
+                                                  }`}
                                               >
                                                 {items?.label}
                                               </Link>
