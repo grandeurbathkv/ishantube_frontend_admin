@@ -101,7 +101,7 @@ export const ReviewsData = [
   },
   {
     id: "8",
-    image: { expireProduct02 },
+    image: expireProduct02,
     Product_Name: "Iphone 14 Pro",
     Author: "Eleanor Panek",
     User_image: user04,

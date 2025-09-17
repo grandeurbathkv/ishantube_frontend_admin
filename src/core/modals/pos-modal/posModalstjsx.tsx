@@ -42,7 +42,8 @@ const PosModals = () => {
 
   const handleSolve = () => {
     try {
-      setInput(eval(input).toString()); // Evaluates the expression safely
+      // Using Function is safer than eval
+      setInput(new Function('return ' + input)().toString());
     } catch (error) {
       setInput("Error");
     }

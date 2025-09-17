@@ -8,7 +8,7 @@ export const SupplierData =[
       email: "apexcomputers@example.com",
       phone: "+12163547758",
       country: "Germany",
-      image: {supplier01},
+      image: supplier01,
       status:"Active",
     },
     {
@@ -18,7 +18,7 @@ export const SupplierData =[
       email: "beatsheadphones@example.com",
       phone: "+16372895190",
       country: "Mexico",
-      image: {supplier02},
+      image: supplier02,
        status:"Active",
     },
     {
@@ -28,7 +28,7 @@ export const SupplierData =[
       email: "dazzleshoes@example.com",
       phone: "+17589201739",
       country: "France",
-      image: {supplier03},
+      image: supplier03,
        status:"Active",
     },
     {
@@ -38,7 +38,7 @@ export const SupplierData =[
       email: "bestaccessories@example.com",
       phone: "+18934092467",
       country: "Italy",
-      image: {supplier04},
+      image: supplier04,
        status:"Active",
     },
     {
@@ -48,7 +48,7 @@ export const SupplierData =[
       email: "atozstore@example.com",
       phone: "+12568749035",
       country: "Belgium",
-      image: {supplier05},
+      image: supplier05,
        status:"Active",
     },
     {
@@ -58,7 +58,7 @@ export const SupplierData =[
       email: "hatimihardwares@example.com",
       phone: "+19054674627",
       country: "Austria",
-      image: {supplier06},
+      image: supplier06,
        status:"Active",
     },
     {
@@ -68,7 +68,7 @@ export const SupplierData =[
       email: "aestheticbags@example.com",
       phone: "+18943670365",
       country: "India",
-      image: {supplier07},
+      image: supplier07,
        status:"Active",
     },
     {
@@ -78,7 +78,7 @@ export const SupplierData =[
       email: "alphamobiles@example.com",
       phone: "+16473894103",
       country: "Greece",
-      image: {supplier08},
+      image: supplier08,
        status:"Active",
     },
     {
@@ -88,7 +88,7 @@ export const SupplierData =[
       email: "sigmachairs@example.com",
       phone: "+17590274536",
       country: "Japan",
-      image: {supplier09},
+      image: supplier09,
        status:"Active",
     },
     {
@@ -98,7 +98,7 @@ export const SupplierData =[
       email: "zenithbags@example.com",
       phone: "+12564098473",
       country: "China",
-      image: {supplier10},
+      image: supplier10,
        status:"Active",
     },
     {
@@ -108,7 +108,7 @@ export const SupplierData =[
       email: "aestheticbags@example.com",
       phone: "+18943670365",
       country: "India",
-      image: {supplier07},
+      image: supplier07,
        status:"Active",
     },
     {
@@ -118,7 +118,7 @@ export const SupplierData =[
       email: "atozstore@example.com",
       phone: "+12568749035",
       country: "Angola",
-      image: {supplier05},
+      image: supplier05,
        status:"Active",
     },
     {
@@ -128,7 +128,7 @@ export const SupplierData =[
       email: "dazzleshoes@example.com",
       phone: "+17589201739",
       country: "Albania",
-      image: {supplier03},
+      image: supplier03,
        status:"Active",
     }
   ]

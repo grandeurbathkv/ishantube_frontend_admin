@@ -33,7 +33,7 @@ export const ProductsData = [
     Unit: "Pc",
     Qty: "100",
     Created_By: "James Kirwin",
-    profile_image: { user30 },
+    profile_image: user30,
   },
   {
     id: "2",
@@ -46,7 +46,7 @@ export const ProductsData = [
     Unit: "Pc",
     Qty: "140",
     Created_By: "Francis Chang",
-    profile_image: { user13 },
+    profile_image: user13,
   },
   {
     id: "3",
@@ -59,7 +59,7 @@ export const ProductsData = [
     Unit: "Pc",
     Qty: "300",
     Created_By: "Antonio Engle",
-    profile_image: { user11 },
+    profile_image: user11,
   },
   {
     id: "4",
@@ -72,7 +72,7 @@ export const ProductsData = [
     Unit: "Pc",
     Qty: "450",
     Created_By: "Leo Kelly",
-    profile_image: { user32 },
+    profile_image: user32,
   },
   {
     id: "5",
@@ -85,7 +85,7 @@ export const ProductsData = [
     Unit: "Pc",
     Qty: "320",
     Created_By: "Annette Walker",
-    profile_image: { user02 },
+    profile_image: user02,
   },
   {
     id: "6",
@@ -98,7 +98,7 @@ export const ProductsData = [
     Unit: "Pc",
     Qty: "650",
     Created_By: "John Weaver",
-    profile_image: { user05 },
+    profile_image: user05,
   },
   {
     id: "7",
@@ -111,7 +111,7 @@ export const ProductsData = [
     Unit: "Pc",
     Qty: "700",
     Created_By: "Gary Hennessy",
-    profile_image: { user08 },
+    profile_image: user08,
   },
   {
     id: "8",
@@ -124,7 +124,7 @@ export const ProductsData = [
     Unit: "Pc",
     Qty: "630",
     Created_By: "Eleanor Panek",
-    profile_image: { user04 },
+    profile_image: user04,
   },
   {
     id: "9",
@@ -137,11 +137,11 @@ export const ProductsData = [
     Unit: "Pc",
     Qty: "410",
     Created_By: "William Levy",
-    profile_image: { user09 },
+    profile_image: user09,
   },
   {
     id: "10",
-    image: { expireProduct04 },
+    image: expireProduct04,
     SKU: "PT010",
     Product_Name: "Borealis Backpack",
     Category: "Bags",
@@ -150,11 +150,11 @@ export const ProductsData = [
     Unit: "Pc",
     Qty: "550",
     Created_By: "Charlotte Klotz",
-    profile_image: { user10 },
+    profile_image: user10,
   },
   {
     id: "11",
-    image: { expireProduct04 },
+    image: expireProduct04,
     SKU: "PT010",
     Product_Name: "Borealis Backpack",
     Category: "Bags",
@@ -163,6 +163,6 @@ export const ProductsData = [
     Unit: "Pc",
     Qty: "550",
     Created_By: "Charlotte Klotz",
-    profile_image: { user10 },
+    profile_image: user10,
   },
 ];

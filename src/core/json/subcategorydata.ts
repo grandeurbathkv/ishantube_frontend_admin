@@ -21,7 +21,7 @@ import {
 export const subcateorydata = [
   {
     id: 1,
-    img: { product1 },
+    img: product1,
     category: "Computers",
     parentcategory: "Computers",
     categorycode: "CT001",
@@ -30,7 +30,7 @@ export const subcateorydata = [
   },
   {
     id: 2,
-    img: { product2 },
+    img: product2,
     category: "Fruits",
     parentcategory: "Fruits",
     categorycode: "CT002",
@@ -39,7 +39,7 @@ export const subcateorydata = [
   },
   {
     id: 3,
-    img: { product3 },
+    img: product3,
     category: "Fruits",
     parentcategory: "Fruits",
     categorycode: "CT003",
@@ -48,7 +48,7 @@ export const subcateorydata = [
   },
   {
     id: 4,
-    img: { product4 },
+    img: product4,
     category: "Fruits",
     parentcategory: "Fruits",
     categorycode: "CT004",
@@ -57,7 +57,7 @@ export const subcateorydata = [
   },
   {
     id: 5,
-    img: { product5 },
+    img: product5,
     category: "Accessories",
     parentcategory: "Accessories",
     categorycode: "CT005",
@@ -66,7 +66,7 @@ export const subcateorydata = [
   },
   {
     id: 6,
-    img: { product6 },
+    img: product6,
     category: "Shoes",
     parentcategory: "Shoes",
     categorycode: "CT006",
@@ -75,7 +75,7 @@ export const subcateorydata = [
   },
   {
     id: 7,
-    img: { product7 },
+    img: product7,
     category: "Fruits",
     parentcategory: "Fruits",
     categorycode: "CT007",
@@ -84,7 +84,7 @@ export const subcateorydata = [
   },
   {
     id: 8,
-    img: { product8 },
+    img: product8,
     category: "Fruits",
     parentcategory: "Fruits",
     categorycode: "CT008",
@@ -93,7 +93,7 @@ export const subcateorydata = [
   },
   {
     id: 9,
-    img: { product9 },
+    img: product9,
     category: "Computers",
     parentcategory: "Computers",
     categorycode: "CT009",
@@ -102,7 +102,7 @@ export const subcateorydata = [
   },
   {
     id: 10,
-    img: { product10 },
+    img: product10,
     category: "Health Care",
     parentcategory: "Health Care",
     categorycode: "CT0010",
@@ -111,7 +111,7 @@ export const subcateorydata = [
   },
   {
     id: 11,
-    img: { product11 },
+    img: product11,
     category: "Fruits",
     parentcategory: "Fruits",
     categorycode: "CT004",
@@ -120,7 +120,7 @@ export const subcateorydata = [
   },
   {
     id: 12,
-    img: { product12 },
+    img: product12,
     category: "Accessories",
     parentcategory: "Accessories",
     categorycode: "CT005",
@@ -129,7 +129,7 @@ export const subcateorydata = [
   },
   {
     id: 13,
-    img: { product13 },
+    img: product13,
     category: "Shoes",
     parentcategory: "Shoes",
     categorycode: "CT006",
@@ -138,7 +138,7 @@ export const subcateorydata = [
   },
   {
     id: 14,
-    img: { product14 },
+    img: product14,
     category: "Fruits",
     parentcategory: "Fruits",
     categorycode: "CT007",
@@ -147,7 +147,7 @@ export const subcateorydata = [
   },
   {
     id: 15,
-    img: { product15 },
+    img: product15,
     category: "Fruits",
     parentcategory: "Fruits",
     categorycode: "CT008",
@@ -156,7 +156,7 @@ export const subcateorydata = [
   },
   {
     id: 16,
-    img: { product16 },
+    img: product16,
     category: "Computers",
     parentcategory: "Computers",
     categorycode: "CT009",
@@ -165,7 +165,7 @@ export const subcateorydata = [
   },
   {
     id: 17,
-    img: { product17 },
+    img: product17,
     category: "Health Care",
     parentcategory: "Health Care",
     categorycode: "CT0010",
