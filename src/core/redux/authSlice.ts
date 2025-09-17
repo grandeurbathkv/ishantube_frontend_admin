@@ -8,9 +8,26 @@ const API_URL = import.meta.env.VITE_API_URL;
 interface UserInfo {
   User_id: string;
   "Mobile Number": string;
-  "Email id": "user@example.com";
+  "Email id": string;
   Image: string;
   "User Name": string;
+  Role: string;
+}
+
+// Response from login/register API
+interface AuthResponse {
+  user: UserInfo;
+  token: string;
+}
+
+// Data for registration
+interface RegisterData {
+  "User Name": string;
+  "Email id": string;
+  Password: string;
+  "User_id": string;
+  "Mobile Number": string;
+  Image: string;
   Role: string;
 }
 
@@ -37,11 +54,14 @@ const initialState: AuthState = {
 };
 
 // Async thunk for user login
-export const loginUser = createAsyncThunk(
+export const loginUser = createAsyncThunk<
+  AuthResponse,
+  { "Email id": string; Password: string }
+>(
   'auth/login',
-  async (loginData: { "Email id": string; Password: string }, { rejectWithValue }) => {
+  async (loginData, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(`${API_URL}/user/login`, loginData); // Adjust endpoint if needed
+      const { data } = await axios.post<AuthResponse>(`${API_URL}/user/login`, loginData); // Adjust endpoint if needed
       // Save token to local storage
       localStorage.setItem('userToken', data.token);
       return data;
@@ -56,12 +76,15 @@ export const loginUser = createAsyncThunk(
 );
 
 // Async thunk for user registration
-export const registerUser = createAsyncThunk(
+export const registerUser = createAsyncThunk<
+  AuthResponse,
+  RegisterData
+>(
   'auth/register',
-  async (userData: any, { rejectWithValue }) => {
+  async (userData, { rejectWithValue }) => {
     try {
       // The response should contain the user object and a token
-      const { data } = await axios.post(`${API_URL}/user/register`, userData); // Adjust endpoint if needed
+      const { data } = await axios.post<AuthResponse>(`${API_URL}/user/register`, userData); // Adjust endpoint if needed
       return data;
     } catch (error: any) {
       if (error.response && error.response.data.message) {
