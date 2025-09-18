@@ -17,18 +17,57 @@ const Biller = () => {
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
+
+  // Architect Form Data
+  const [architectData, setArchitectData] = useState({
+    arch_id: "",
+    arch_name: "",
+    mobile: "",
+    email: "",
+    arch_type: "",
+    arch_category: "",
+    image: null as File | null,
+    arch_address: "",
+    arch_city: "",
+    arch_state: ""
+  });
+
+  // OTP Validation state (optional)
+  const [showOtpInput, setShowOtpInput] = useState(false);
+  const [otpValue, setOtpValue] = useState("");
+  const [mobileValidated, setMobileValidated] = useState(false);
+
+  // Dynamic dropdown management
+  const [newArchType, setNewArchType] = useState("");
+  const [showNewArchType, setShowNewArchType] = useState(false);
+  const [newCity, setNewCity] = useState("");
+  const [showNewCity, setShowNewCity] = useState(false);
+  const [newState, setNewState] = useState("");
+  const [showNewState, setShowNewState] = useState(false);
+
+  // Dynamic data arrays (would come from database in real app)
+  const [archTypes, setArchTypes] = useState([
+    "Residential Architect",
+    "Commercial Architect", 
+    "Landscape Architect",
+    "Interior Architect"
+  ]);
+  const [cities, setCities] = useState([
+    "Los Angeles", "New York City", "Houston", "Phoenix", "Philadelphia"
+  ]);
+  const [states, setStates] = useState([
+    "California", "New York", "Texas", "Arizona", "Pennsylvania"
+  ]);
   const cityOptions = [
-    { label: "Select", value: "" },
-    { label: "Los Angles", value: "los-angles" },
-    { label: "New York City", value: "new-york-city" },
-    { label: "Houston", value: "houston" },
+    { label: "Select City", value: "" },
+    ...cities.map(city => ({ label: city, value: city.toLowerCase().replace(/\s+/g, '-') })),
+    { label: "Add New City", value: "add-new-city" }
   ];
 
   const stateOptions = [
-    { label: "Select", value: "" },
-    { label: "California", value: "california" },
-    { label: "New York", value: "new-york" },
-    { label: "Texas", value: "texas" },
+    { label: "Select State", value: "" },
+    ...states.map(state => ({ label: state, value: state.toLowerCase().replace(/\s+/g, '-') })),
+    { label: "Add New State", value: "add-new-state" }
   ];
 
   const countryOptions = [
@@ -37,6 +76,96 @@ const Biller = () => {
     { label: "Canada", value: "canada" },
     { label: "Germany", value: "germany" },
   ];
+
+  const archTypeOptions = [
+    { label: "Select Architect Type", value: "" },
+    ...archTypes.map(type => ({ label: type, value: type.toLowerCase().replace(/\s+/g, '-') })),
+    { label: "Add New Type", value: "add-new-type" }
+  ];
+
+  const archCategoryOptions = [
+    { label: "Select Category", value: "" },
+    { label: "Category A", value: "A" },
+    { label: "Category B", value: "B" },
+    { label: "Category C", value: "C" },
+    { label: "Category D", value: "D" }
+  ];
+
+  // Validation Functions
+  const validateMobile = (mobile: string) => {
+    return /^[0-9]{10}$/.test(mobile);
+  };
+
+  const sendOTP = () => {
+    if (validateMobile(architectData.mobile)) {
+      setShowOtpInput(true);
+      console.log("OTP sent to:", architectData.mobile);
+    } else {
+      alert("Please enter a valid 10-digit mobile number");
+    }
+  };
+
+  const verifyOTP = () => {
+    if (otpValue.length === 6) {
+      setMobileValidated(true);
+      setShowOtpInput(false);
+      console.log("OTP verified");
+    } else {
+      alert("Please enter a valid 6-digit OTP");
+    }
+  };
+
+  // Dynamic dropdown handlers
+  const handleArchTypeChange = (value: string) => {
+    if (value === "add-new-type") {
+      setShowNewArchType(true);
+    } else {
+      setArchitectData({...architectData, arch_type: value});
+    }
+  };
+
+  const handleCityChange = (value: string) => {
+    if (value === "add-new-city") {
+      setShowNewCity(true);
+    } else {
+      setArchitectData({...architectData, arch_city: value});
+    }
+  };
+
+  const handleStateChange = (value: string) => {
+    if (value === "add-new-state") {
+      setShowNewState(true);
+    } else {
+      setArchitectData({...architectData, arch_state: value});
+    }
+  };
+
+  const addNewArchType = () => {
+    if (newArchType.trim()) {
+      setArchTypes([...archTypes, newArchType.trim()]);
+      setArchitectData({...architectData, arch_type: newArchType.toLowerCase().replace(/\s+/g, '-')});
+      setNewArchType("");
+      setShowNewArchType(false);
+    }
+  };
+
+  const addNewCity = () => {
+    if (newCity.trim()) {
+      setCities([...cities, newCity.trim()]);
+      setArchitectData({...architectData, arch_city: newCity.toLowerCase().replace(/\s+/g, '-')});
+      setNewCity("");
+      setShowNewCity(false);
+    }
+  };
+
+  const addNewState = () => {
+    if (newState.trim()) {
+      setStates([...states, newState.trim()]);
+      setArchitectData({...architectData, arch_state: newState.toLowerCase().replace(/\s+/g, '-')});
+      setNewState("");
+      setShowNewState(false);
+    }
+  };
  
   const columns = [
     {
@@ -55,24 +184,67 @@ const Biller = () => {
       sortable: false,
       key: "checked",
     },
-    { header: "Code", field: "code", key: "code" },
+    { header: "Arch ID", field: "arch_id", key: "arch_id" },
     {
-      header: "Biller",
-      field: "biller",
-      key: "biller",
+      header: "Architect",
+      field: "arch_name",
+      key: "arch_name",
       body: (data: any) => (
         <div className="d-flex align-items-center">
           <Link to="#" className="avatar avatar-md me-2">
-            <img src={data.avatar} alt="product" />
+            <img src={data.avatar || "/default-avatar.png"} alt="architect" />
           </Link>
-          <Link to="#">{data.biller}</Link>
+          <div>
+            <Link to="#" className="fw-medium">{data.arch_name}</Link>
+            <br />
+            <small className="text-muted">{data.arch_type}</small>
+          </div>
         </div>
       ),
     },
-    { header: "Company Name", field: "company", key: "company" },
+    {
+      header: "Category",
+      field: "arch_category",
+      key: "arch_category",
+      body: (data: any) => (
+        <span className={`badge bg-primary text-white px-2 py-1`}>
+          Category {data.arch_category}
+        </span>
+      ),
+    },
+    { 
+      header: "Mobile", 
+      field: "mobile", 
+      key: "mobile",
+      body: (data: any) => (
+        <div>
+          <div>{data.mobile}</div>
+          {data.mobileVerified && <small className="text-success">✓ Verified</small>}
+        </div>
+      ),
+    },
     { header: "Email", field: "email", key: "email" },
-    { header: "Phone", field: "phone", key: "phone" },
-    { header: "Country", field: "country", key: "country" },
+    {
+      header: "Location",
+      field: "location",
+      key: "location",
+      body: (data: any) => (
+        <div>
+          <div className="fw-medium">{data.arch_city}</div>
+          <small className="text-muted">{data.arch_state}</small>
+        </div>
+      ),
+    },
+    {
+      header: "Address",
+      field: "arch_address",
+      key: "arch_address",
+      body: (data: any) => (
+        <div className="text-truncate" style={{maxWidth: "200px"}} title={data.arch_address}>
+          {data.arch_address}
+        </div>
+      ),
+    },
     {
       header: "Status",
       field: "status",
@@ -130,8 +302,8 @@ const Biller = () => {
           <div className="page-header">
             <div className="add-item d-flex">
               <div className="page-title">
-                <h4 className="fw-bold">Billers</h4>
-                <h6>Manage your billers</h6>
+                <h4 className="fw-bold">Architects</h4>
+                <h6>Manage your architects</h6>
               </div>
             </div>
             <TableTopHead />
@@ -143,7 +315,7 @@ const Biller = () => {
                 data-bs-target="#add-biller"
               >
                 <i className="ti ti-circle-plus me-1" />
-                Add Biller
+                Add Architect
               </Link>
             </div>
           </div>
@@ -207,15 +379,15 @@ const Biller = () => {
           </p>
         </div>
       </div>
-      {/* Add biller */}
+      {/* Add Architect */}
       <div className="modal fade" id="add-biller">
-        <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-dialog modal-dialog-centered modal-lg">
           <div className="modal-content">
             <div className="page-wrapper-new p-0">
               <div className="content">
                 <div className="modal-header">
                   <div className="page-title">
-                    <h4>Add Biller</h4>
+                    <h4>Add Architect</h4>
                   </div>
                   <button
                     type="button"
@@ -228,108 +400,306 @@ const Biller = () => {
                 </div>
                 <form action="billers.html.html">
                   <div className="modal-body">
-                    <div className="new-employee-field">
-                      <div className="profile-pic-upload">
-                        <div className="profile-pic">
-                          <span>
-                            <i className="feather icon-plus-circle plus-down-add" />{" "}
-                            Add Image
-                          </span>
-                        </div>
-                        <div className="mb-3">
-                          <div className="image-upload mb-0">
-                            <input type="file" />
-                            <div className="image-uploads">
-                              <h4>Upload Image</h4>
+                    {/* Architect Information */}
+                    <div className="row mb-4">
+                      <div className="col-12">
+                        <h6 className="fw-bold text-primary mb-3">Architect Information</h6>
+                      </div>
+
+                      {/* Image Upload */}
+                      <div className="col-12 mb-3">
+                        <div className="new-employee-field">
+                          <div className="profile-pic-upload">
+                            <div className="profile-pic">
+                              <span>
+                                <i className="feather icon-plus-circle plus-down-add" />{" "}
+                                Add Image
+                              </span>
+                            </div>
+                            <div className="mb-3">
+                              <div className="image-upload mb-0">
+                                <input 
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={(e) => setArchitectData({
+                                    ...architectData, 
+                                    image: e.target.files?.[0] || null
+                                  })}
+                                />
+                                <div className="image-uploads">
+                                  <h4>Upload Image</h4>
+                                </div>
+                              </div>
+                              <p className="mt-2">JPEG, PNG up to 2 MB (Optional)</p>
                             </div>
                           </div>
-                          <p className="mt-2">JPEG, PNG up to 2 MB</p>
                         </div>
                       </div>
-                    </div>
-                    <div className="row">
+
                       <div className="col-lg-6 mb-3">
                         <label className="form-label">
-                          First Name<span className="text-danger ms-1">*</span>
+                          Architect ID<span className="text-danger ms-1">*</span>
                         </label>
-                        <input type="text" className="form-control" />
+                        <input 
+                          type="text" 
+                          className="form-control"
+                          value={architectData.arch_id}
+                          onChange={(e) => setArchitectData({
+                            ...architectData, 
+                            arch_id: e.target.value
+                          })}
+                          placeholder="Enter unique Architect ID"
+                          required
+                        />
                       </div>
+
                       <div className="col-lg-6 mb-3">
                         <label className="form-label">
-                          Last Name<span className="text-danger ms-1">*</span>
+                          Architect Name<span className="text-danger ms-1">*</span>
                         </label>
-                        <input type="text" className="form-control" />
+                        <input 
+                          type="text" 
+                          className="form-control"
+                          value={architectData.arch_name}
+                          onChange={(e) => setArchitectData({
+                            ...architectData, 
+                            arch_name: e.target.value
+                          })}
+                          placeholder="Enter Architect Name"
+                          required
+                        />
                       </div>
+
+                      <div className="col-lg-6 mb-3">
+                        <label className="form-label">
+                          Mobile Number (WhatsApp)<span className="text-danger ms-1">*</span>
+                        </label>
+                        <div className="input-group">
+                          <input 
+                            type="tel" 
+                            className={`form-control ${mobileValidated ? 'border-success' : ''}`}
+                            value={architectData.mobile}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                              setArchitectData({
+                                ...architectData, 
+                                mobile: value
+                              });
+                              setMobileValidated(false);
+                            }}
+                            placeholder="Enter 10-digit mobile number"
+                            maxLength={10}
+                            required
+                          />
+                          <button
+                            type="button"
+                            className="btn btn-outline-primary"
+                            onClick={sendOTP}
+                            disabled={!validateMobile(architectData.mobile) || mobileValidated}
+                          >
+                            {mobileValidated ? 'Verified' : 'Send OTP (Optional)'}
+                          </button>
+                        </div>
+                        {mobileValidated && (
+                          <small className="text-success">✓ Mobile number verified</small>
+                        )}
+                      </div>
+
+                      {showOtpInput && (
+                        <div className="col-lg-6 mb-3">
+                          <label className="form-label">
+                            Enter OTP
+                          </label>
+                          <div className="input-group">
+                            <input 
+                              type="text" 
+                              className="form-control"
+                              value={otpValue}
+                              onChange={(e) => setOtpValue(e.target.value.slice(0, 6))}
+                              placeholder="Enter 6-digit OTP"
+                              maxLength={6}
+                            />
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={verifyOTP}
+                            >
+                              Verify
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="col-lg-6 mb-3">
+                        <label className="form-label">
+                          Email ID
+                        </label>
+                        <input 
+                          type="email" 
+                          className="form-control"
+                          value={architectData.email}
+                          onChange={(e) => setArchitectData({
+                            ...architectData, 
+                            email: e.target.value
+                          })}
+                          placeholder="Enter email address (optional)"
+                        />
+                      </div>
+
+                      <div className="col-lg-6 mb-3">
+                        <label className="form-label">
+                          Architect Type<span className="text-danger ms-1">*</span>
+                        </label>
+                        {showNewArchType ? (
+                          <div className="input-group">
+                            <input 
+                              type="text" 
+                              className="form-control"
+                              value={newArchType}
+                              onChange={(e) => setNewArchType(e.target.value)}
+                              placeholder="Enter new architect type"
+                            />
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={addNewArchType}
+                            >
+                              Add
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-secondary"
+                              onClick={() => setShowNewArchType(false)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <CommonSelect
+                            className="w-100"
+                            options={archTypeOptions}
+                            value={architectData.arch_type}
+                            onChange={(e) => handleArchTypeChange(e.value)}
+                            placeholder="Select Architect Type"
+                            filter={false}
+                          />
+                        )}
+                      </div>
+
+                      <div className="col-lg-6 mb-3">
+                        <label className="form-label">
+                          Architect Category<span className="text-danger ms-1">*</span>
+                        </label>
+                        <CommonSelect
+                          className="w-100"
+                          options={archCategoryOptions}
+                          value={architectData.arch_category}
+                          onChange={(e) => setArchitectData({
+                            ...architectData, 
+                            arch_category: e.value
+                          })}
+                          placeholder="Select Category"
+                          filter={false}
+                        />
+                      </div>
+
                       <div className="col-lg-12 mb-3">
                         <label className="form-label">
-                          Company Name
-                          <span className="text-danger ms-1">*</span>
+                          Architect Address<span className="text-danger ms-1">*</span>
                         </label>
-                        <input type="text" className="form-control" />
+                        <textarea 
+                          className="form-control"
+                          rows={3}
+                          value={architectData.arch_address}
+                          onChange={(e) => setArchitectData({
+                            ...architectData, 
+                            arch_address: e.target.value
+                          })}
+                          placeholder="Enter complete address"
+                          required
+                        />
                       </div>
-                      <div className="col-lg-12 mb-3">
-                        <label className="form-label">
-                          Email<span className="text-danger ms-1">*</span>
-                        </label>
-                        <input type="email" className="form-control" />
-                      </div>
-                      <div className="col-lg-12 mb-3">
-                        <label className="form-label">
-                          Phone<span className="text-danger ms-1">*</span>
-                        </label>
-                        <input type="tel" className="form-control" />
-                      </div>
-                      <div className="col-lg-12 mb-3">
-                        <label className="form-label">
-                          Address<span className="text-danger ms-1">*</span>
-                        </label>
-                        <input type="text" className="form-control" />
-                      </div>
+
                       <div className="col-lg-6 mb-3">
                         <label className="form-label">
                           City<span className="text-danger ms-1">*</span>
                         </label>
-                        <CommonSelect
-                          className="w-100"
-                          options={cityOptions}
-                          value={selectedCity}
-                          onChange={(e) => setSelectedCity(e.value)}
-                          placeholder="Select City"
-                          filter={false}
-                        />
+                        {showNewCity ? (
+                          <div className="input-group">
+                            <input 
+                              type="text" 
+                              className="form-control"
+                              value={newCity}
+                              onChange={(e) => setNewCity(e.target.value)}
+                              placeholder="Enter new city"
+                            />
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={addNewCity}
+                            >
+                              Add
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-secondary"
+                              onClick={() => setShowNewCity(false)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <CommonSelect
+                            className="w-100"
+                            options={cityOptions}
+                            value={architectData.arch_city}
+                            onChange={(e) => handleCityChange(e.value)}
+                            placeholder="Select City"
+                            filter={false}
+                          />
+                        )}
                       </div>
+
                       <div className="col-lg-6 mb-3">
                         <label className="form-label">
                           State<span className="text-danger ms-1">*</span>
                         </label>
-                        <CommonSelect
-                          className="w-100"
-                          options={stateOptions}
-                          value={selectedState}
-                          onChange={(e) => setSelectedState(e.value)}
-                          placeholder="Select State"
-                          filter={false}
-                        />
+                        {showNewState ? (
+                          <div className="input-group">
+                            <input 
+                              type="text" 
+                              className="form-control"
+                              value={newState}
+                              onChange={(e) => setNewState(e.target.value)}
+                              placeholder="Enter new state"
+                            />
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={addNewState}
+                            >
+                              Add
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-secondary"
+                              onClick={() => setShowNewState(false)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <CommonSelect
+                            className="w-100"
+                            options={stateOptions}
+                            value={architectData.arch_state}
+                            onChange={(e) => handleStateChange(e.value)}
+                            placeholder="Select State"
+                            filter={false}
+                          />
+                        )}
                       </div>
-                      <div className="col-lg-6 mb-3">
-                        <label className="form-label">
-                          Country<span className="text-danger ms-1">*</span>
-                        </label>
-                        <CommonSelect
-                          className="w-100"
-                          options={countryOptions}
-                          value={selectedCountry}
-                          onChange={(e) => setSelectedCountry(e.value)}
-                          placeholder="Select Country"
-                          filter={false}
-                        />
-                      </div>
-                      <div className="col-lg-6 mb-3">
-                        <label className="form-label">
-                          Postal Code<span className="text-danger ms-1">*</span>
-                        </label>
-                        <input type="text" className="form-control" />
-                      </div>
+
                       <div className="col-lg-12">
                         <div className="status-toggle modal-status d-flex justify-content-between align-items-center">
                           <span className="status-label">Status</span>
@@ -354,8 +724,21 @@ const Biller = () => {
                     >
                       Cancel
                     </button>
-                    <button type="submit" className="btn btn-primary">
-                      Add Biller
+                    <button 
+                      type="submit" 
+                      className="btn btn-primary"
+                      disabled={
+                        !architectData.arch_id || 
+                        !architectData.arch_name || 
+                        !validateMobile(architectData.mobile) ||
+                        !architectData.arch_type ||
+                        !architectData.arch_category ||
+                        !architectData.arch_address ||
+                        !architectData.arch_city ||
+                        !architectData.arch_state
+                      }
+                    >
+                      Add Architect
                     </button>
                   </div>
                 </form>

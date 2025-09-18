@@ -8,6 +8,8 @@ import CommonFooter from "../../components/footer/commonFooter";
 import { editSupplier } from "../../utils/imagepath";
 import { useState } from "react";
 import { Link } from "react-router";
+import { Modal } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 const Suppliers = () => {
   const [listData, _setListData] = useState<any[]>(suppliersData);
@@ -18,19 +20,156 @@ const Suppliers = () => {
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
+
+  // Party Form Data - Complete Schema
+  const [partyData, setPartyData] = useState({
+    party_id: "",
+    party_billing_name: "",
+    contact_person: "",
+    mobile: "",
+    other_numbers: "",
+    email: "",
+    party_address: "",
+    party_city: "",
+    party_state: "",
+    party_gstno: "",
+    party_default_user_id: "",
+    party_default_cp_id: "",
+    party_default_arch_id: ""
+  });
+
+  // OTP Validation state
+  const [showOtpInput, setShowOtpInput] = useState(false);
+  const [otpValue, setOtpValue] = useState("");
+  const [mobileValidated, setMobileValidated] = useState(false);
+
+  // Dynamic dropdown management
+  const [newCity, setNewCity] = useState("");
+  const [showNewCity, setShowNewCity] = useState(false);
+  const [newState, setNewState] = useState("");
+  const [showNewState, setShowNewState] = useState(false);
+
+  // Dynamic data arrays (would come from database in real app)
+  const [cities, setCities] = useState([
+    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Kolkata", "Pune", "Ahmedabad", "Jaipur", "Lucknow"
+  ]);
+  const [states, setStates] = useState([
+    "Maharashtra", "Delhi", "Karnataka", "Telangana", "Tamil Nadu", "West Bengal", "Gujarat", "Rajasthan", "Uttar Pradesh", "Madhya Pradesh"
+  ]);
+  const [users, setUsers] = useState([
+    { id: "user_001", name: "Admin User" },
+    { id: "user_002", name: "Manager User" },
+    { id: "user_003", name: "Sales User" },
+    { id: "user_004", name: "Regional Manager" }
+  ]);
+  const [channelPartners, setChannelPartners] = useState([
+    { id: "cp_001", name: "NorthStar Distributors" },
+    { id: "cp_002", name: "Eastern Electronics" },
+    { id: "cp_003", name: "Metro Wholesale" },
+    { id: "cp_004", name: "Prime Traders" }
+  ]);
+  const [architects, setArchitects] = useState([
+    { id: "arch_001", name: "Rajesh Kumar Sharma" },
+    { id: "arch_002", name: "Priya Joshi" },
+    { id: "arch_003", name: "Arjun Patel" },
+    { id: "arch_004", name: "Neha Gupta" }
+  ]);
+
   const cityOptions = [
-    { label: "Select", value: "" },
-    { label: "Los Angles", value: "los-angles" },
-    { label: "New York City", value: "new-york-city" },
-    { label: "Houston", value: "houston" },
+    { label: "Select City", value: "" },
+    ...cities.map(city => ({ label: city, value: city.toLowerCase().replace(/\s+/g, '-') })),
+    { label: "Add New City", value: "add-new-city" }
   ];
 
   const stateOptions = [
-    { label: "Select", value: "" },
-    { label: "California", value: "california" },
-    { label: "New York", value: "new-york" },
-    { label: "Texas", value: "texas" },
+    { label: "Select State", value: "" },
+    ...states.map(state => ({ label: state, value: state.toLowerCase().replace(/\s+/g, '-') })),
+    { label: "Add New State", value: "add-new-state" }
   ];
+
+  const userOptions = [
+    { label: "Select User", value: "" },
+    ...users.map(user => ({ label: user.name, value: user.id }))
+  ];
+
+  const channelPartnerOptions = [
+    { label: "Select Channel Partner", value: "" },
+    { label: "NA", value: "NA" },
+    ...channelPartners.map(cp => ({ label: cp.name, value: cp.id }))
+  ];
+
+  const architectOptions = [
+    { label: "Select Architect", value: "" },
+    { label: "NA", value: "NA" },
+    ...architects.map(arch => ({ label: arch.name, value: arch.id }))
+  ];
+
+  // Validation Functions
+  const validateMobile = (mobile: string) => {
+    return /^[0-9]{10}$/.test(mobile);
+  };
+
+  const validateGST = (gst: string) => {
+    return gst.length === 0 || gst.length === 15;
+  };
+
+  const validateEmail = (email: string) => {
+    return email === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const sendOTP = () => {
+    if (validateMobile(partyData.mobile)) {
+      setShowOtpInput(true);
+      console.log("OTP sent to:", partyData.mobile);
+    } else {
+      alert("Please enter a valid 10-digit mobile number");
+    }
+  };
+
+  const verifyOTP = () => {
+    if (otpValue.length === 6) {
+      setMobileValidated(true);
+      setShowOtpInput(false);
+      console.log("OTP verified");
+    } else {
+      alert("Please enter a valid 6-digit OTP");
+    }
+  };
+
+  // Dynamic dropdown handlers
+  const handleCityChange = (value: string) => {
+    if (value === "add-new-city") {
+      setShowNewCity(true);
+    } else {
+      setPartyData({...partyData, party_city: value});
+    }
+  };
+
+  const handleStateChange = (value: string) => {
+    if (value === "add-new-state") {
+      setShowNewState(true);
+    } else {
+      setPartyData({...partyData, party_state: value});
+    }
+  };
+
+  const addNewCity = () => {
+    if (newCity.trim()) {
+      setCities([...cities, newCity.trim()]);
+      setPartyData({...partyData, party_city: newCity.toLowerCase().replace(/\s+/g, '-')});
+      setNewCity("");
+      setShowNewCity(false);
+    }
+  };
+
+  const addNewState = () => {
+    if (newState.trim()) {
+      setStates([...states, newState.trim()]);
+      setPartyData({...partyData, party_state: newState.toLowerCase().replace(/\s+/g, '-')});
+      setNewState("");
+      setShowNewState(false);
+    }
+  };
 
   const countryOptions = [
     { label: "Select", value: "" },
@@ -38,6 +177,23 @@ const Suppliers = () => {
     { label: "Canada", value: "canada" },
     { label: "Germany", value: "germany" },
   ];
+
+  const showConfirm = (record: any) => {
+    Modal.confirm({
+      title: "Are you sure delete this party?",
+      icon: <ExclamationCircleOutlined />,
+      content: "This action cannot be undone.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        console.log("OK");
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
+  };
 
   const columns = [
     {
@@ -56,38 +212,52 @@ const Suppliers = () => {
       sortable: false,
       key: "checked",
     },
-    { header: "Code", field: "code", key: "code" },
+    { header: "SNo", field: "sno", key: "sno" },
+    { header: "Party ID", field: "partyId", key: "partyId" },
     {
-      header: "Supplier",
-      field: "supplier",
-      key: "supplier",
+      header: "Party Name",
+      field: "partyName",
+      key: "partyName",
       body: (data: any) => (
         <div className="d-flex align-items-center">
-          <Link to="#" className="avatar avatar-md">
-            <img src={data.avatar} className="img-fluid rounded-2" alt="img" />
-          </Link>
+          <div className="avatar avatar-md bg-primary text-white rounded-circle d-flex align-items-center justify-content-center">
+            {data.partyName?.charAt(0)?.toUpperCase() || 'P'}
+          </div>
           <div className="ms-2">
             <p className="text-gray-9 mb-0">
-              <Link to="#">{data.supplier}</Link>
+              <Link to="#">{data.partyName}</Link>
             </p>
           </div>
         </div>
       ),
     },
-    { header: "Email", field: "email", key: "email" },
-    { header: "Phone", field: "phone", key: "phone" },
-    { header: "Country", field: "country", key: "country" },
-    {
-      header: "Status",
-      field: "status",
-      key: "status",
+    { header: "Contact Person", field: "contact", key: "contact" },
+    { 
+      header: "Mobile", 
+      field: "mobile", 
+      key: "mobile",
       body: (data: any) => (
-        <span className="badge badge-success d-inline-flex align-items-center badge-xs">
-          <i className="ti ti-point-filled me-1"></i>
-          {data.status}
+        <span className="text-success">
+          <i className="ti ti-phone me-1"></i>
+          {data.mobile}
+        </span>
+      )
+    },
+    { header: "City", field: "city", key: "city" },
+    { header: "State", field: "state", key: "state" },
+    { header: "GST Number", field: "gst", key: "gst" },
+    {
+      header: "Rating",
+      field: "rating",
+      key: "rating",
+      body: (data: any) => (
+        <span className="badge badge-primary d-inline-flex align-items-center badge-xs">
+          <i className="ti ti-star-filled me-1"></i>
+          {data.rating}
         </span>
       ),
     },
+    { header: "Created On", field: "createdOn", key: "createdOn" },
     {
       header: "",
       field: "actions",
@@ -95,23 +265,11 @@ const Suppliers = () => {
       sortable: false,
       body: (_row: any) => (
         <div className="edit-delete-action">
-          <Link className="me-2 p-2" to="#">
-            <i  className="feather icon-eye"></i>
+          <Link className="me-2 p-2" to="#" data-bs-toggle="modal" data-bs-target="#edit-party">
+            <i className="feather icon-edit"></i>
           </Link>
-          <Link
-            className="me-2 p-2"
-            to="#"
-            data-bs-toggle="modal"
-            data-bs-target="#edit-supplier"
-          >
-            <i  className="feather icon-edit"></i>
-          </Link>
-          <Link
-            className="p-2"
-            to="#"
-             data-bs-toggle="modal" data-bs-target="#delete-modal"
-          >
-            <i  className="feather icon-trash-2"></i>
+          <Link className="confirm-text p-2" to="#" onClick={() => showConfirm(_row)}>
+            <i className="feather icon-trash-2"></i>
           </Link>
         </div>
       ),
@@ -130,8 +288,8 @@ const Suppliers = () => {
           <div className="page-header">
             <div className="add-item d-flex">
               <div className="page-title">
-                <h4>Suppliers</h4>
-                <h6>Manage your suppliers</h6>
+                <h4>Parties</h4>
+                <h6>Manage your parties</h6>
               </div>
             </div>
             <TableTopHead />
@@ -140,10 +298,10 @@ const Suppliers = () => {
                 to="#"
                 className="btn btn-primary"
                 data-bs-toggle="modal"
-                data-bs-target="#add-supplier"
+                data-bs-target="#add-party"
               >
                 <i className="ti ti-circle-plus me-1" />
-                Add Supplier
+                Add Party
               </Link>
             </div>
           </div>
@@ -197,13 +355,13 @@ const Suppliers = () => {
         </div>
        <CommonFooter />
       </div>
-      {/* Add Supplier */}
-      <div className="modal fade" id="add-supplier">
+      {/* Add Party */}
+      <div className="modal fade" id="add-party">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
               <div className="page-title">
-                <h4>Add Supplier</h4>
+                <h4>Add Party</h4>
               </div>
               <button
                 type="button"
@@ -217,121 +375,289 @@ const Suppliers = () => {
             <form action="suppliers.html">
               <div className="modal-body">
                 <div className="row">
-                  <div className="col-lg-12">
-                    <div className="new-employee-field">
-                      <div className="profile-pic-upload mb-2">
-                        <div className="profile-pic">
-                          <span>
-                            <i
-                              
-                              className="feather icon-plus-circle plus-down-add"
-                            />
-                            Add Image
-                          </span>
-                        </div>
-                        <div className="mb-0">
-                          <div className="image-upload mb-2">
-                            <input type="file" />
-                            <div className="image-uploads">
-                              <h4>Upload Image</h4>
-                            </div>
-                          </div>
-                          <p>JPEG, PNG up to 2 MB</p>
-                        </div>
+                  <div className="col-lg-6">
+                    <div className="mb-3">
+                      <label className="form-label">
+                        Party ID <span className="text-danger">*</span>
+                      </label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={partyData.party_id}
+                        onChange={(e) => setPartyData({...partyData, party_id: e.target.value})}
+                        placeholder="Enter unique Party ID"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="mb-3">
+                      <label className="form-label">
+                        Party Billing Name <span className="text-danger">*</span>
+                      </label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={partyData.party_billing_name}
+                        onChange={(e) => setPartyData({...partyData, party_billing_name: e.target.value})}
+                        placeholder="Enter party billing name"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="mb-3">
+                      <label className="form-label">
+                        Contact Person <span className="text-danger">*</span>
+                      </label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={partyData.contact_person}
+                        onChange={(e) => setPartyData({...partyData, contact_person: e.target.value})}
+                        placeholder="Enter contact person name"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="mb-3">
+                      <label className="form-label">
+                        Mobile Number <span className="text-danger">*</span>
+                      </label>
+                      <div className="input-group">
+                        <input 
+                          type="text" 
+                          className="form-control" 
+                          value={partyData.mobile}
+                          onChange={(e) => setPartyData({...partyData, mobile: e.target.value})}
+                          placeholder="Enter 10-digit mobile number"
+                          maxLength={10}
+                          required
+                        />
+                        <button 
+                          type="button" 
+                          className="btn btn-outline-primary"
+                          onClick={sendOTP}
+                          disabled={!validateMobile(partyData.mobile)}
+                        >
+                          Send OTP
+                        </button>
                       </div>
+                      {!validateMobile(partyData.mobile) && partyData.mobile && (
+                        <small className="text-danger">Mobile number must be exactly 10 digits</small>
+                      )}
+                      {showOtpInput && (
+                        <div className="mt-2">
+                          <div className="input-group">
+                            <input 
+                              type="text" 
+                              className="form-control" 
+                              value={otpValue}
+                              onChange={(e) => setOtpValue(e.target.value)}
+                              placeholder="Enter 6-digit OTP"
+                              maxLength={6}
+                            />
+                            <button 
+                              type="button" 
+                              className="btn btn-success"
+                              onClick={verifyOTP}
+                            >
+                              Verify
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                      {mobileValidated && (
+                        <small className="text-success">✓ Mobile number verified</small>
+                      )}
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="mb-3">
+                      <label className="form-label">Other Numbers</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={partyData.other_numbers}
+                        onChange={(e) => setPartyData({...partyData, other_numbers: e.target.value})}
+                        placeholder="Enter other contact numbers (optional)"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="mb-3">
+                      <label className="form-label">Email ID</label>
+                      <input 
+                        type="email" 
+                        className="form-control" 
+                        value={partyData.email}
+                        onChange={(e) => setPartyData({...partyData, email: e.target.value})}
+                        placeholder="Enter email address (optional)"
+                      />
+                      {!validateEmail(partyData.email) && partyData.email && (
+                        <small className="text-danger">Please enter a valid email address</small>
+                      )}
+                    </div>
+                  </div>
+                  <div className="col-lg-12">
+                    <div className="mb-3">
+                      <label className="form-label">
+                        Party Address <span className="text-danger">*</span>
+                      </label>
+                      <textarea 
+                        className="form-control" 
+                        rows={3}
+                        value={partyData.party_address}
+                        onChange={(e) => setPartyData({...partyData, party_address: e.target.value})}
+                        placeholder="Enter complete party address"
+                        required
+                      />
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="mb-3">
                       <label className="form-label">
-                        First Name <span className="text-danger">*</span>
-                      </label>
-                      <input type="text" className="form-control" />
-                    </div>
-                  </div>
-                  <div className="col-lg-6">
-                    <div className="mb-3">
-                      <label className="form-label">
-                        Last Name <span className="text-danger">*</span>
-                      </label>
-                      <input type="text" className="form-control" />
-                    </div>
-                  </div>
-                  <div className="col-lg-12">
-                    <div className="mb-3">
-                      <label className="form-label">
-                        Email <span className="text-danger">*</span>
-                      </label>
-                      <input type="email" className="form-control" />
-                    </div>
-                  </div>
-                  <div className="col-lg-12">
-                    <div className="mb-3">
-                      <label className="form-label">
-                        Phone <span className="text-danger">*</span>
-                      </label>
-                      <input type="text" className="form-control" />
-                    </div>
-                  </div>
-                  <div className="col-lg-12">
-                    <div className="mb-3">
-                      <label className="form-label">
-                        Address <span className="text-danger">*</span>
-                      </label>
-                      <input type="text" className="form-control" />
-                    </div>
-                  </div>
-                  <div className="col-lg-6 col-sm-10 col-10">
-                    <div className="mb-3">
-                      <label className="form-label">
-                        City <span className="text-danger">*</span>
+                        Party City <span className="text-danger">*</span>
                       </label>
                       <CommonSelect
                         className="w-100"
                         options={cityOptions}
-                        value={selectedCity}
-                        onChange={(e) => setSelectedCity(e.value)}
+                        value={partyData.party_city}
+                        onChange={(e) => handleCityChange(e.value)}
                         placeholder="Select City"
-                        filter={false}
+                        filter={true}
                       />
+                      {showNewCity && (
+                        <div className="mt-2">
+                          <div className="input-group">
+                            <input 
+                              type="text"
+                              className="form-control"
+                              value={newCity}
+                              onChange={(e) => setNewCity(e.target.value)}
+                              placeholder="Enter new city name"
+                            />
+                            <button 
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={addNewCity}
+                            >
+                              Add
+                            </button>
+                            <button 
+                              type="button"
+                              className="btn btn-secondary"
+                              onClick={() => setShowNewCity(false)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                  <div className="col-lg-6 col-sm-10 col-10">
+                  <div className="col-lg-6">
                     <div className="mb-3">
                       <label className="form-label">
-                        State <span className="text-danger">*</span>
+                        Party State <span className="text-danger">*</span>
                       </label>
                       <CommonSelect
                         className="w-100"
                         options={stateOptions}
-                        value={selectedState}
-                        onChange={(e) => setSelectedState(e.value)}
+                        value={partyData.party_state}
+                        onChange={(e) => handleStateChange(e.value)}
                         placeholder="Select State"
-                        filter={false}
+                        filter={true}
                       />
+                      {showNewState && (
+                        <div className="mt-2">
+                          <div className="input-group">
+                            <input 
+                              type="text"
+                              className="form-control"
+                              value={newState}
+                              onChange={(e) => setNewState(e.target.value)}
+                              placeholder="Enter new state name"
+                            />
+                            <button 
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={addNewState}
+                            >
+                              Add
+                            </button>
+                            <button 
+                              type="button"
+                              className="btn btn-secondary"
+                              onClick={() => setShowNewState(false)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                  <div className="col-lg-6 col-sm-10 col-10">
+                  <div className="col-lg-6">
+                    <div className="mb-3">
+                      <label className="form-label">Party GST Number</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        value={partyData.party_gstno}
+                        onChange={(e) => setPartyData({...partyData, party_gstno: e.target.value})}
+                        placeholder="Enter 15-character GST number (optional)"
+                        maxLength={15}
+                      />
+                      {partyData.party_gstno && !validateGST(partyData.party_gstno) && (
+                        <small className="text-danger">GST number must be exactly 15 characters</small>
+                      )}
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
                     <div className="mb-3">
                       <label className="form-label">
-                        Country <span className="text-danger">*</span>
+                        Default User <span className="text-danger">*</span>
                       </label>
                       <CommonSelect
                         className="w-100"
-                        options={countryOptions}
-                        value={selectedCountry}
-                        onChange={(e) => setSelectedCountry(e.value)}
-                        placeholder="Select Country"
-                        filter={false}
+                        options={userOptions}
+                        value={partyData.party_default_user_id}
+                        onChange={(e) => setPartyData({...partyData, party_default_user_id: e.value})}
+                        placeholder="Select Default User"
+                        filter={true}
                       />
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="mb-3">
                       <label className="form-label">
-                        Postal Code <span className="text-danger">*</span>
+                        Default Channel Partner <span className="text-danger">*</span>
                       </label>
-                      <input type="text" className="form-control" />
+                      <CommonSelect
+                        className="w-100"
+                        options={channelPartnerOptions}
+                        value={partyData.party_default_cp_id}
+                        onChange={(e) => setPartyData({...partyData, party_default_cp_id: e.value})}
+                        placeholder="Select Channel Partner or NA"
+                        filter={true}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="mb-3">
+                      <label className="form-label">
+                        Default Architect <span className="text-danger">*</span>
+                      </label>
+                      <CommonSelect
+                        className="w-100"
+                        options={architectOptions}
+                        value={partyData.party_default_arch_id}
+                        onChange={(e) => setPartyData({...partyData, party_default_arch_id: e.value})}
+                        placeholder="Select Architect or NA"
+                        filter={true}
+                      />
                     </div>
                   </div>
                   <div className="col-md-12">
@@ -359,14 +685,14 @@ const Suppliers = () => {
                   Cancel
                 </button>
                 <button type="submit" className="btn btn-primary">
-                  Add Supplier
+                  Add Party
                 </button>
               </div>
             </form>
           </div>
         </div>
       </div>
-      {/* /Add Supplier */}
+      {/* /Add Party */}
       {/* Edit Supplier */}
       <div className="modal fade" id="edit-supplier">
         <div className="modal-dialog modal-dialog-centered">
