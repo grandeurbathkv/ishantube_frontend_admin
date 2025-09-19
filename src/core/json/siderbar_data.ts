@@ -113,7 +113,7 @@ export const SidebarData = [
       },
       {
         label: "Channel Partner Incentive",
-        link: route.customers,
+        link: '/warehouse',
         icon: 'users-group',
         showSubRoute: false,
         submenu: false,
@@ -139,14 +139,6 @@ export const SidebarData = [
         showSubRoute: false,
         submenu: false,
       },
-
-      //  {
-      //   label: "Sites Details",
-      //   link: "/suppliers",
-      //   icon: 'user-dollar',
-      //   showSubRoute: false,
-      //   submenu: false,
-      // },
       // {
       //   label: "Warehouses",
       //   link: "/warehouse",

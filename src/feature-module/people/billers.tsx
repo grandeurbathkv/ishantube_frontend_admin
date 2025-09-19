@@ -20,7 +20,6 @@ const Biller = () => {
 
   // Architect Form Data
   const [architectData, setArchitectData] = useState({
-    arch_id: "",
     arch_name: "",
     mobile: "",
     email: "",
@@ -184,7 +183,6 @@ const Biller = () => {
       sortable: false,
       key: "checked",
     },
-    { header: "Arch ID", field: "arch_id", key: "arch_id" },
     {
       header: "Architect",
       field: "arch_name",
@@ -195,7 +193,12 @@ const Biller = () => {
             <img src={data.avatar || "/default-avatar.png"} alt="architect" />
           </Link>
           <div>
-            <Link to="#" className="fw-medium">{data.arch_name}</Link>
+            <Link 
+              to="#" 
+              className={`fw-medium ${data.status === "Active" ? "text-success" : "text-danger"}`}
+            >
+              {data.arch_name}
+            </Link>
             <br />
             <small className="text-muted">{data.arch_type}</small>
           </div>
@@ -233,29 +236,6 @@ const Biller = () => {
           <div className="fw-medium">{data.arch_city}</div>
           <small className="text-muted">{data.arch_state}</small>
         </div>
-      ),
-    },
-    {
-      header: "Address",
-      field: "arch_address",
-      key: "arch_address",
-      body: (data: any) => (
-        <div className="text-truncate" style={{maxWidth: "200px"}} title={data.arch_address}>
-          {data.arch_address}
-        </div>
-      ),
-    },
-    {
-      header: "Status",
-      field: "status",
-      key: "status",
-      body: (data: any) => (
-        <span
-          className={`d-inline-flex align-items-center p-1 pe-2 rounded-1 text-white bg-${data.status === "Active" ? "success" : "danger"} fs-10`}
-        >
-          <i className="ti ti-point-filled me-1 fs-11"></i>
-          {data.status}
-        </span>
       ),
     },
     {
@@ -434,23 +414,6 @@ const Biller = () => {
                             </div>
                           </div>
                         </div>
-                      </div>
-
-                      <div className="col-lg-6 mb-3">
-                        <label className="form-label">
-                          Architect ID<span className="text-danger ms-1">*</span>
-                        </label>
-                        <input 
-                          type="text" 
-                          className="form-control"
-                          value={architectData.arch_id}
-                          onChange={(e) => setArchitectData({
-                            ...architectData, 
-                            arch_id: e.target.value
-                          })}
-                          placeholder="Enter unique Architect ID"
-                          required
-                        />
                       </div>
 
                       <div className="col-lg-6 mb-3">
@@ -728,7 +691,6 @@ const Biller = () => {
                       type="submit" 
                       className="btn btn-primary"
                       disabled={
-                        !architectData.arch_id || 
                         !architectData.arch_name || 
                         !validateMobile(architectData.mobile) ||
                         !architectData.arch_type ||

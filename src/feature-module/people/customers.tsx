@@ -20,16 +20,11 @@ const Customers = () => {
 
   // Channel Partner Form Data
   const [channelPartnerData, setChannelPartnerData] = useState({
-    CP_id: "",
     CP_Name: "",
     mobile: "",
     email: "",
     image: null as File | null,
-    CP_Address: "",
-    // Channel Partner Incentive (Default)
-    brand: "",
-    incentive_type: "",
-    incentive_factor: 0
+    CP_Address: ""
   });
 
   // Validation state
@@ -54,7 +49,6 @@ const Customers = () => {
       sortable: false,
       key: "checked",
     },
-    { header: "CP ID", field: "CP_id", key: "CP_id" },
     {
       header: "Channel Partner",
       field: "CP_Name",
@@ -83,9 +77,9 @@ const Customers = () => {
         </div>
       ),
     },
-    { 
-      header: "Mobile", 
-      field: "mobile", 
+    {
+      header: "Mobile",
+      field: "mobile",
       key: "mobile",
       body: (data: any) => (
         <div>
@@ -96,52 +90,12 @@ const Customers = () => {
     },
     { header: "Email", field: "email", key: "email" },
     {
-      header: "Brand",
-      field: "brand",
-      key: "brand"
-    },
-    {
-      header: "Commission",
-      field: "commission",
-      key: "commission",
+      header: "Address",
+      field: "CP_Address",
+      key: "CP_Address",
       body: (data: any) => (
-        <div>
-          <span className="fw-medium">
-            {data.commissionStructure?.value}
-            {data.commissionStructure?.type === "percentage" ? "%" : ` ${data.commissionStructure?.currency}`}
-          </span>
-          <br />
-          <small className="text-muted">{data.commissionStructure?.type}</small>
-        </div>
-      ),
-    },
-    {
-      header: "Region",
-      field: "regionCoverage",
-      key: "regionCoverage",
-      body: (data: any) => (
-        <div>
-          {data.regionCoverage?.slice(0, 2).map((region: string, index: number) => (
-            <span key={index} className="badge bg-light text-dark me-1 mb-1">
-              {region}
-            </span>
-          ))}
-          {data.regionCoverage?.length > 2 && (
-            <span className="text-muted">+{data.regionCoverage.length - 2} more</span>
-          )}
-        </div>
-      ),
-    },
-    {
-      header: "Status",
-      field: "status",
-      key: "status",
-      body: (data: any) => (
-        <span
-          className={`d-inline-flex align-items-center p-1 pe-2 rounded-1 text-white bg-${data.status === "Active" ? "success" : "danger"} fs-10`}
-        >
-          <i className="ti ti-point-filled me-1 fs-11"></i>
-          {data.status}
+        <span className="text-muted" title={data.CP_Address}>
+          {data.CP_Address?.length > 30 ? `${data.CP_Address.substring(0, 30)}...` : data.CP_Address}
         </span>
       ),
     },
@@ -156,7 +110,7 @@ const Customers = () => {
             className="me-2 p-2 d-flex align-items-center border rounded"
             to="#"
           >
-            <i  className="feather icon-eye"></i>
+            <i className="feather icon-eye"></i>
           </Link>
           <Link
             className="me-2 p-2 d-flex align-items-center border rounded"
@@ -362,7 +316,7 @@ const Customers = () => {
                   <div className="col-12">
                     <h6 className="fw-bold text-primary mb-3">Channel Partner Information</h6>
                   </div>
-                  
+
                   {/* Profile Image Upload */}
                   <div className="col-12 mb-3">
                     <div className="new-employee-field">
@@ -374,11 +328,11 @@ const Customers = () => {
                         </div>
                         <div className="mb-3">
                           <div className="image-upload mb-0">
-                            <input 
-                              type="file" 
+                            <input
+                              type="file"
                               accept="image/*"
                               onChange={(e) => setChannelPartnerData({
-                                ...channelPartnerData, 
+                                ...channelPartnerData,
                                 image: e.target.files?.[0] || null
                               })}
                             />
@@ -392,209 +346,116 @@ const Customers = () => {
                     </div>
                   </div>
 
-                  <div className="col-lg-6 mb-3">
-                    <label className="form-label">
-                      Channel Partner ID<span className="text-danger ms-1">*</span>
-                    </label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      value={channelPartnerData.CP_id}
-                      onChange={(e) => setChannelPartnerData({
-                        ...channelPartnerData, 
-                        CP_id: e.target.value
-                      })}
-                      placeholder="Enter unique Channel Partner ID"
-                      required
-                    />
-                  </div>
-                  
-                  <div className="col-lg-6 mb-3">
-                    <label className="form-label">
-                      Channel Partner Name<span className="text-danger ms-1">*</span>
-                    </label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      value={channelPartnerData.CP_Name}
-                      onChange={(e) => setChannelPartnerData({
-                        ...channelPartnerData, 
-                        CP_Name: e.target.value
-                      })}
-                      placeholder="Enter Channel Partner Name"
-                      required
-                    />
-                  </div>
-
-                  <div className="col-lg-6 mb-3">
-                    <label className="form-label">
-                      Mobile Number (WhatsApp)<span className="text-danger ms-1">*</span>
-                    </label>
-                    <div className="input-group">
-                      <input 
-                        type="tel" 
-                        className={`form-control ${mobileValidated ? 'border-success' : ''}`}
-                        value={channelPartnerData.mobile}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, '').slice(0, 10);
-                          setChannelPartnerData({
-                            ...channelPartnerData, 
-                            mobile: value
-                          });
-                          setMobileValidated(false);
-                        }}
-                        placeholder="Enter 10-digit mobile number"
-                        maxLength={10}
-                        required
-                      />
-                      <button
-                        type="button"
-                        className="btn btn-outline-primary"
-                        onClick={sendOTP}
-                        disabled={!validateMobile(channelPartnerData.mobile) || mobileValidated}
-                      >
-                        {mobileValidated ? 'Verified' : 'Send OTP'}
-                      </button>
-                    </div>
-                    {mobileValidated && (
-                      <small className="text-success">✓ Mobile number verified</small>
-                    )}
-                  </div>
-
-                  {showOtpInput && (
+                  <div className="row">
                     <div className="col-lg-6 mb-3">
                       <label className="form-label">
-                        Enter OTP<span className="text-danger ms-1">*</span>
+                        Channel Partner Name<span className="text-danger ms-1">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={channelPartnerData.CP_Name}
+                        onChange={(e) => setChannelPartnerData({
+                          ...channelPartnerData,
+                          CP_Name: e.target.value
+                        })}
+                        placeholder="Enter Channel Partner Name"
+                        required
+                      />
+                    </div>
+
+                    <div className="col-lg-6 mb-3">
+                      <label className="form-label">
+                        Mobile Number (WhatsApp)<span className="text-danger ms-1">*</span>
                       </label>
                       <div className="input-group">
-                        <input 
-                          type="text" 
-                          className="form-control"
-                          value={otpValue}
-                          onChange={(e) => setOtpValue(e.target.value.slice(0, 6))}
-                          placeholder="Enter 6-digit OTP"
-                          maxLength={6}
+                        <input
+                          type="tel"
+                          className={`form-control ${mobileValidated ? 'border-success' : ''}`}
+                          value={channelPartnerData.mobile}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                            setChannelPartnerData({
+                              ...channelPartnerData,
+                              mobile: value
+                            });
+                            setMobileValidated(false);
+                          }}
+                          placeholder="Enter 10-digit mobile number"
+                          maxLength={10}
+                          required
                         />
                         <button
                           type="button"
-                          className="btn btn-primary"
-                          onClick={verifyOTP}
+                          className="btn btn-outline-primary"
+                          onClick={sendOTP}
+                          disabled={!validateMobile(channelPartnerData.mobile) || mobileValidated}
                         >
-                          Verify
+                          {mobileValidated ? 'Verified' : 'Send OTP'}
                         </button>
                       </div>
+                      {mobileValidated && (
+                        <small className="text-success">✓ Mobile number verified</small>
+                      )}
                     </div>
-                  )}
 
-                  <div className="col-lg-6 mb-3">
-                    <label className="form-label">
-                      Email ID
-                    </label>
-                    <input 
-                      type="email" 
-                      className="form-control"
-                      value={channelPartnerData.email}
-                      onChange={(e) => setChannelPartnerData({
-                        ...channelPartnerData, 
-                        email: e.target.value
-                      })}
-                      placeholder="Enter email address (optional)"
-                    />
-                  </div>
-
-                  <div className="col-lg-12 mb-3">
-                    <label className="form-label">
-                      Channel Partner Address<span className="text-danger ms-1">*</span>
-                    </label>
-                    <textarea 
-                      className="form-control"
-                      rows={3}
-                      value={channelPartnerData.CP_Address}
-                      onChange={(e) => setChannelPartnerData({
-                        ...channelPartnerData, 
-                        CP_Address: e.target.value
-                      })}
-                      placeholder="Enter complete address"
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Channel Partner Incentive (Default) */}
-                <div className="row mb-4">
-                  <div className="col-12">
-                    <h6 className="fw-bold text-primary mb-3">Channel Partner Incentive (Default)</h6>
-                  </div>
-                  
-                  <div className="col-lg-6 mb-3">
-                    <label className="form-label">
-                      Brand<span className="text-danger ms-1">*</span>
-                    </label>
-                    <CommonSelect
-                      className="w-100"
-                      options={brandOptions}
-                      value={channelPartnerData.brand}
-                      onChange={(e) => setChannelPartnerData({
-                        ...channelPartnerData, 
-                        brand: e.value
-                      })}
-                      placeholder="Select Brand"
-                      filter={false}
-                    />
-                  </div>
-
-                  <div className="col-lg-6 mb-3">
-                    <label className="form-label">
-                      Incentive Type<span className="text-danger ms-1">*</span>
-                    </label>
-                    <CommonSelect
-                      className="w-100"
-                      options={incentiveTypeOptions}
-                      value={channelPartnerData.incentive_type}
-                      onChange={(e) => {
-                        setChannelPartnerData({
-                          ...channelPartnerData, 
-                          incentive_type: e.value,
-                          incentive_factor: 0 // Reset factor when type changes
-                        });
-                      }}
-                      placeholder="Select Incentive Type"
-                      filter={false}
-                    />
-                  </div>
-
-                  <div className="col-lg-6 mb-3">
-                    <label className="form-label">
-                      Incentive Factor<span className="text-danger ms-1">*</span>
-                    </label>
-                    <input 
-                      type="number" 
-                      className="form-control"
-                      value={channelPartnerData.incentive_factor}
-                      onChange={(e) => {
-                        const value = parseFloat(e.target.value) || 0;
-                        setChannelPartnerData({
-                          ...channelPartnerData, 
-                          incentive_factor: value
-                        });
-                      }}
-                      placeholder={
-                        channelPartnerData.incentive_type === "percentage" 
-                          ? "Enter percentage (0.00 - 99.99)" 
-                          : "Enter fixed amount (≥ 0.00)"
-                      }
-                      min="0"
-                      max={channelPartnerData.incentive_type === "percentage" ? "99.99" : undefined}
-                      step="0.01"
-                      required
-                    />
-                    {channelPartnerData.incentive_type && (
-                      <small className="text-muted">
-                        {channelPartnerData.incentive_type === "percentage" 
-                          ? "Value should be between 0.00 to 99.99" 
-                          : "Value should be 0.00 or greater"}
-                      </small>
+                    {showOtpInput && (
+                      <div className="col-lg-6 mb-3">
+                        <label className="form-label">
+                          Enter OTP<span className="text-danger ms-1">*</span>
+                        </label>
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={otpValue}
+                            onChange={(e) => setOtpValue(e.target.value.slice(0, 6))}
+                            placeholder="Enter 6-digit OTP"
+                            maxLength={6}
+                          />
+                          <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={verifyOTP}
+                          >
+                            Verify
+                          </button>
+                        </div>
+                      </div>
                     )}
+
+                    <div className="col-lg-6 mb-3">
+                      <label className="form-label">
+                        Email ID
+                      </label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        value={channelPartnerData.email}
+                        onChange={(e) => setChannelPartnerData({
+                          ...channelPartnerData,
+                          email: e.target.value
+                        })}
+                        placeholder="Enter email address (optional)"
+                      />
+                    </div>
+
+                    <div className="col-lg-12 mb-3">
+                      <label className="form-label">
+                        Channel Partner Address<span className="text-danger ms-1">*</span>
+                      </label>
+                      <textarea
+                        className="form-control"
+                        rows={3}
+                        value={channelPartnerData.CP_Address}
+                        onChange={(e) => setChannelPartnerData({
+                          ...channelPartnerData,
+                          CP_Address: e.target.value
+                        })}
+                        placeholder="Enter complete address"
+                        required
+                      />
+                    </div>
                   </div>
 
                   <div className="col-lg-12">
@@ -614,29 +475,25 @@ const Customers = () => {
                 </div>
               </div>
               <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none"
-                  data-bs-dismiss="modal"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="btn btn-primary fs-13 fw-medium p-2 px-3"
-                  disabled={
-                    !channelPartnerData.CP_id || 
-                    !channelPartnerData.CP_Name || 
-                    !mobileValidated || 
-                    !channelPartnerData.CP_Address ||
-                    !channelPartnerData.brand ||
-                    !channelPartnerData.incentive_type ||
-                    !validateIncentiveFactor(channelPartnerData.incentive_type, channelPartnerData.incentive_factor)
-                  }
-                >
-                  Add Channel Partner
-                </button>
-              </div>
+                  <button
+                    type="button"
+                    className="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none"
+                    data-bs-dismiss="modal"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-primary fs-13 fw-medium p-2 px-3"
+                    disabled={
+                      !channelPartnerData.CP_Name ||
+                      !mobileValidated ||
+                      !channelPartnerData.CP_Address
+                    }
+                  >
+                    Add Channel Partner
+                  </button>
+                </div>
             </form>
           </div>
         </div>

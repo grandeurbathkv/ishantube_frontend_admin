@@ -13,6 +13,7 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 const Suppliers = () => {
   const [listData, _setListData] = useState<any[]>(suppliersData);
+  console.log('Suppliers listData:', listData);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalRecords, _setTotalRecords] = useState<any>(5);
   const [rows, setRows] = useState<number>(10);
@@ -23,7 +24,6 @@ const Suppliers = () => {
 
   // Party Form Data - Complete Schema
   const [partyData, setPartyData] = useState({
-    party_id: "",
     party_billing_name: "",
     contact_person: "",
     mobile: "",
@@ -32,7 +32,6 @@ const Suppliers = () => {
     party_address: "",
     party_city: "",
     party_state: "",
-    party_gstno: "",
     party_default_user_id: "",
     party_default_cp_id: "",
     party_default_arch_id: ""
@@ -107,10 +106,6 @@ const Suppliers = () => {
   // Validation Functions
   const validateMobile = (mobile: string) => {
     return /^[0-9]{10}$/.test(mobile);
-  };
-
-  const validateGST = (gst: string) => {
-    return gst.length === 0 || gst.length === 15;
   };
 
   const validateEmail = (email: string) => {
@@ -212,8 +207,6 @@ const Suppliers = () => {
       sortable: false,
       key: "checked",
     },
-    { header: "SNo", field: "sno", key: "sno" },
-    { header: "Party ID", field: "partyId", key: "partyId" },
     {
       header: "Party Name",
       field: "partyName",
@@ -243,21 +236,22 @@ const Suppliers = () => {
         </span>
       )
     },
+    { 
+      header: "Email", 
+      field: "email", 
+      key: "email",
+      body: (data: any) => {
+        console.log('Email data:', data);
+        return (
+          <span className="text-info">
+            <i className="ti ti-mail me-1"></i>
+            {data.email || 'N/A'}
+          </span>
+        );
+      }
+    },
     { header: "City", field: "city", key: "city" },
     { header: "State", field: "state", key: "state" },
-    { header: "GST Number", field: "gst", key: "gst" },
-    {
-      header: "Rating",
-      field: "rating",
-      key: "rating",
-      body: (data: any) => (
-        <span className="badge badge-primary d-inline-flex align-items-center badge-xs">
-          <i className="ti ti-star-filled me-1"></i>
-          {data.rating}
-        </span>
-      ),
-    },
-    { header: "Created On", field: "createdOn", key: "createdOn" },
     {
       header: "",
       field: "actions",
@@ -357,7 +351,7 @@ const Suppliers = () => {
       </div>
       {/* Add Party */}
       <div className="modal fade" id="add-party">
-        <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-dialog modal-dialog-centered modal-lg">
           <div className="modal-content">
             <div className="modal-header">
               <div className="page-title">
@@ -375,21 +369,6 @@ const Suppliers = () => {
             <form action="suppliers.html">
               <div className="modal-body">
                 <div className="row">
-                  <div className="col-lg-6">
-                    <div className="mb-3">
-                      <label className="form-label">
-                        Party ID <span className="text-danger">*</span>
-                      </label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        value={partyData.party_id}
-                        onChange={(e) => setPartyData({...partyData, party_id: e.target.value})}
-                        placeholder="Enter unique Party ID"
-                        required
-                      />
-                    </div>
-                  </div>
                   <div className="col-lg-6">
                     <div className="mb-3">
                       <label className="form-label">
@@ -599,22 +578,7 @@ const Suppliers = () => {
                       )}
                     </div>
                   </div>
-                  <div className="col-lg-6">
-                    <div className="mb-3">
-                      <label className="form-label">Party GST Number</label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        value={partyData.party_gstno}
-                        onChange={(e) => setPartyData({...partyData, party_gstno: e.target.value})}
-                        placeholder="Enter 15-character GST number (optional)"
-                        maxLength={15}
-                      />
-                      {partyData.party_gstno && !validateGST(partyData.party_gstno) && (
-                        <small className="text-danger">GST number must be exactly 15 characters</small>
-                      )}
-                    </div>
-                  </div>
+
                   <div className="col-lg-6">
                     <div className="mb-3">
                       <label className="form-label">

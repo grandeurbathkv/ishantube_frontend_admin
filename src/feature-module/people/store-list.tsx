@@ -19,7 +19,6 @@ const StoreList = () => {
 
   // Site Form Data - Complete Schema
   const [siteData, setSiteData] = useState({
-    site_id: "",
     site_billing_name: "",
     contact_person: "",
     mobile: "",
@@ -30,7 +29,6 @@ const StoreList = () => {
     site_address: "",
     site_city: "",
     site_state: "",
-    site_gstno: "",
     site_party_id: "",
     site_user_id: "",
     site_cp_id: ""
@@ -107,10 +105,6 @@ const StoreList = () => {
   // Validation Functions
   const validateMobile = (mobile: string) => {
     return /^[0-9]{10}$/.test(mobile);
-  };
-
-  const validateGST = (gst: string) => {
-    return gst.length === 0 || gst.length === 15;
   };
 
   const validateEmail = (email: string) => {
@@ -228,7 +222,6 @@ const StoreList = () => {
       sortable: false,
       key: "checked",
     },
-    { header: "Site ID", field: "site_id", key: "site_id" },
     { 
       header: "Site Name", 
       field: "site_billing_name", 
@@ -262,18 +255,6 @@ const StoreList = () => {
     { header: "City", field: "site_city", key: "site_city" },
     { header: "State", field: "site_state", key: "site_state" },
     { header: "Party", field: "site_party_id", key: "site_party_id" },
-    { header: "GST Number", field: "site_gstno", key: "site_gstno" },
-    {
-      header: "Status",
-      field: "status",
-      key: "status",
-      body: (data: any) => (
-        <span className="badge badge-success d-inline-flex align-items-center badge-xs">
-          <i className="ti ti-point-filled me-1"></i>
-          {data.status}
-        </span>
-      ),
-    },
     {
       header: "",
       field: "actions",
@@ -385,22 +366,7 @@ const StoreList = () => {
             <form action="store-list.html">
               <div className="modal-body">
                 <div className="row">
-                  <div className="col-lg-6">
-                    <div className="mb-3">
-                      <label className="form-label">
-                        Site ID <span className="text-danger">*</span>
-                      </label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        value={siteData.site_id}
-                        onChange={(e) => setSiteData({...siteData, site_id: e.target.value})}
-                        placeholder="Enter unique Site ID"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="col-lg-6">
+                  <div className="col-lg-12">
                     <div className="mb-3">
                       <label className="form-label">
                         Site Billing Name <span className="text-danger">*</span>
@@ -787,22 +753,7 @@ const StoreList = () => {
             <form action="store-list.html">
               <div className="modal-body">
                 <div className="row">
-                  <div className="col-lg-6">
-                    <div className="mb-3">
-                      <label className="form-label">
-                        Site ID <span className="text-danger">*</span>
-                      </label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        value={siteData.site_id}
-                        onChange={(e) => setSiteData({...siteData, site_id: e.target.value})}
-                        placeholder="Enter unique Site ID"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="col-lg-6">
+                  <div className="col-lg-12">
                     <div className="mb-3">
                       <label className="form-label">
                         Site Billing Name <span className="text-danger">*</span>
