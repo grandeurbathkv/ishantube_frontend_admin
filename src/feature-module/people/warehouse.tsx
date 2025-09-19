@@ -6,7 +6,7 @@ import TableTopHead from "../../components/table-top-head";
 import SearchFromApi from "../../components/data-table/search";
 import CommonSelect from "../../components/select/common-select";
 import DeleteModal from "../../components/delete-modal";
-import channelPartnerIncentiveData from "../../core/json/channel-partner-incentive-data";
+import { channelPartnerIncentiveData } from "../../core/json/channel-partner-incentive-data";
 
 const ChannelPartnerIncentive = () => {
   const [listData, _setListData] = useState<any[]>(channelPartnerIncentiveData);
@@ -14,7 +14,7 @@ const ChannelPartnerIncentive = () => {
   const [totalRecords, _setTotalRecords] = useState<any>(5);
   const [rows, setRows] = useState<number>(10);
   const [_searchQuery, setSearchQuery] = useState<string | undefined>(undefined);
-  
+
   // Form state for Channel Partner Incentive
   const [incentiveData, setIncentiveData] = useState({
     cp_name: "",
@@ -66,11 +66,11 @@ const ChannelPartnerIncentive = () => {
   // Validation function for incentive factor
   const validateIncentiveFactor = (value: string, type: string) => {
     const numValue = parseFloat(value);
-    
+
     if (isNaN(numValue)) {
       return "Please enter a valid number";
     }
-    
+
     if (type === "Percentage") {
       if (numValue < 0.00 || numValue > 99.99) {
         return "Percentage must be between 0.00 to 99.99";
@@ -80,18 +80,18 @@ const ChannelPartnerIncentive = () => {
         return "Fixed amount cannot be less than 0.00";
       }
     }
-    
+
     return "";
   };
 
   const handleMobileChange = (value: string) => {
-    setIncentiveData({...incentiveData, mobile: value});
+    setIncentiveData({ ...incentiveData, mobile: value });
     const error = validateMobile(value);
     setMobileError(error);
   };
 
   const handleEmailChange = (value: string) => {
-    setIncentiveData({...incentiveData, email: value});
+    setIncentiveData({ ...incentiveData, email: value });
     const error = validateEmail(value);
     setEmailError(error);
   };
@@ -117,8 +117,8 @@ const ChannelPartnerIncentive = () => {
   };
 
   const handleIncentiveFactorChange = (value: string) => {
-    setIncentiveData({...incentiveData, incentive_factor: value});
-    
+    setIncentiveData({ ...incentiveData, incentive_factor: value });
+
     if (incentiveData.incentive_type) {
       const error = validateIncentiveFactor(value, incentiveData.incentive_type);
       setIncentiveFactorError(error);
@@ -126,8 +126,8 @@ const ChannelPartnerIncentive = () => {
   };
 
   const handleIncentiveTypeChange = (type: string) => {
-    setIncentiveData({...incentiveData, incentive_type: type});
-    
+    setIncentiveData({ ...incentiveData, incentive_type: type });
+
     if (incentiveData.incentive_factor) {
       const error = validateIncentiveFactor(incentiveData.incentive_factor, type);
       setIncentiveFactorError(error);
@@ -204,32 +204,31 @@ const ChannelPartnerIncentive = () => {
         <span className="fw-medium">{data.brand}</span>
       ),
     },
-    { 
-      header: "Incentive Type", 
-      field: "incentive_type", 
+    {
+      header: "Incentive Type",
+      field: "incentive_type",
       key: "incentive_type",
       body: (data: any) => (
-        <span 
-          className={`d-inline-flex align-items-center p-1 pe-2 rounded-1 text-white fs-10 ${
-            data.incentive_type === "Percentage" 
-              ? "bg-primary" 
+        <span
+          className={`d-inline-flex align-items-center p-1 pe-2 rounded-1 text-white fs-10 ${data.incentive_type === "Percentage"
+              ? "bg-primary"
               : "bg-success"
-          }`}
+            }`}
         >
           <i className="ti ti-point-filled me-1 fs-11"></i>
           {data.incentive_type}
         </span>
       ),
     },
-    { 
-      header: "Incentive Factor", 
-      field: "incentive_factor", 
+    {
+      header: "Incentive Factor",
+      field: "incentive_factor",
       key: "incentive_factor",
       body: (data: any) => (
         <div>
           <span className="fw-medium">
-            {data.incentive_type === "Percentage" 
-              ? `${data.incentive_factor}%` 
+            {data.incentive_type === "Percentage"
+              ? `${data.incentive_factor}%`
               : `₹${parseFloat(data.incentive_factor).toLocaleString()}`
             }
           </span>
@@ -345,7 +344,7 @@ const ChannelPartnerIncentive = () => {
           {/* /product list */}
         </div>
       </div>
-      
+
       {/* Add Channel Partner Incentive Modal */}
       <div className="modal fade" id="add-incentive">
         <div className="modal-dialog modal-dialog-centered modal-lg">
@@ -370,7 +369,7 @@ const ChannelPartnerIncentive = () => {
                   <div className="col-12">
                     <h6 className="fw-bold text-primary mb-3">Channel Partner Incentive (Default)</h6>
                   </div>
-                  
+
                   {/* Profile Image Upload */}
                   <div className="col-12 mb-3">
                     <div className="new-employee-field">
@@ -382,13 +381,13 @@ const ChannelPartnerIncentive = () => {
                         </div>
                         <div className="mb-3">
                           <div className="image-upload mb-0">
-                            <input 
-                              type="file" 
+                            <input
+                              type="file"
                               accept="image/*"
                               onChange={(e) => {
                                 const file = e.target.files?.[0];
                                 if (file) {
-                                  setIncentiveData({...incentiveData, image: file.name});
+                                  setIncentiveData({ ...incentiveData, image: file.name });
                                 }
                               }}
                             />
@@ -401,16 +400,16 @@ const ChannelPartnerIncentive = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="col-lg-6 mb-3">
                     <label className="form-label">
                       Channel Partner Name<span className="text-danger ms-1">*</span>
                     </label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       className="form-control"
                       value={incentiveData.cp_name}
-                      onChange={(e) => setIncentiveData({...incentiveData, cp_name: e.target.value})}
+                      onChange={(e) => setIncentiveData({ ...incentiveData, cp_name: e.target.value })}
                       placeholder="Enter Channel Partner Name"
                       required
                     />
@@ -421,13 +420,13 @@ const ChannelPartnerIncentive = () => {
                       Mobile Number (WhatsApp)<span className="text-danger ms-1">*</span>
                     </label>
                     <div className="input-group">
-                      <input 
-                        type="tel" 
+                      <input
+                        type="tel"
                         className={`form-control ${mobileValidated ? 'border-success' : ''}`}
                         value={incentiveData.mobile}
                         onChange={(e) => {
                           const value = e.target.value.replace(/\D/g, '').slice(0, 10);
-                          setIncentiveData({...incentiveData, mobile: value});
+                          setIncentiveData({ ...incentiveData, mobile: value });
                           setMobileValidated(false);
                         }}
                         placeholder="Enter 10-digit mobile number"
@@ -454,8 +453,8 @@ const ChannelPartnerIncentive = () => {
                         Enter OTP<span className="text-danger ms-1">*</span>
                       </label>
                       <div className="input-group">
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           className="form-control"
                           value={otpValue}
                           onChange={(e) => setOtpValue(e.target.value.slice(0, 6))}
@@ -477,8 +476,8 @@ const ChannelPartnerIncentive = () => {
                     <label className="form-label">
                       Email ID
                     </label>
-                    <input 
-                      type="email" 
+                    <input
+                      type="email"
                       className="form-control"
                       value={incentiveData.email}
                       onChange={(e) => handleEmailChange(e.target.value)}
@@ -495,32 +494,32 @@ const ChannelPartnerIncentive = () => {
                     <label className="form-label">
                       Channel Partner Address<span className="text-danger ms-1">*</span>
                     </label>
-                    <textarea 
+                    <textarea
                       className="form-control"
                       rows={3}
                       value={incentiveData.cp_address}
-                      onChange={(e) => setIncentiveData({...incentiveData, cp_address: e.target.value})}
+                      onChange={(e) => setIncentiveData({ ...incentiveData, cp_address: e.target.value })}
                       placeholder="Enter complete address"
                       required
                     />
                   </div>
-                {/* </div> */}
+                  {/* </div> */}
 
-                {/* Channel Partner Incentive (Default) */}
-                {/* <div className="row mb-4"> */}
+                  {/* Channel Partner Incentive (Default) */}
+                  {/* <div className="row mb-4"> */}
                   {/* <div className="col-12">
                     <h6 className="fw-bold text-primary mb-3">Channel Partner Incentive (Default)</h6>
                   </div> */}
-                  
+
                   <div className="col-lg-6 mb-3">
                     <label className="form-label">
                       Brand<span className="text-danger ms-1">*</span>
                     </label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       className="form-control"
                       value={incentiveData.brand}
-                      onChange={(e) => setIncentiveData({...incentiveData, brand: e.target.value})}
+                      onChange={(e) => setIncentiveData({ ...incentiveData, brand: e.target.value })}
                       placeholder="Enter brand name"
                       required
                     />
@@ -549,15 +548,15 @@ const ChannelPartnerIncentive = () => {
                         {incentiveData.incentive_type === "Fixed Amount" && (
                           <span className="input-group-text">₹</span>
                         )}
-                        <input 
-                          type="number" 
+                        <input
+                          type="number"
                           step="0.01"
                           className={`form-control ${incentiveFactorError ? 'is-invalid' : ''}`}
                           value={incentiveData.incentive_factor}
                           onChange={(e) => handleIncentiveFactorChange(e.target.value)}
                           placeholder={
-                            incentiveData.incentive_type === "Percentage" 
-                              ? "Enter percentage (0.00 - 99.99)" 
+                            incentiveData.incentive_type === "Percentage"
+                              ? "Enter percentage (0.00 - 99.99)"
                               : "Enter amount"
                           }
                           required
@@ -612,8 +611,8 @@ const ChannelPartnerIncentive = () => {
                   type="submit"
                   className="btn btn-primary fs-13 fw-medium p-2 px-3"
                   disabled={
-                    !incentiveData.cp_name || 
-                    !mobileValidated || 
+                    !incentiveData.cp_name ||
+                    !mobileValidated ||
                     !incentiveData.cp_address ||
                     !incentiveData.brand ||
                     !incentiveData.incentive_type ||
@@ -654,11 +653,11 @@ const ChannelPartnerIncentive = () => {
                       <label className="form-label">
                         CP Name <span className="text-danger">*</span>
                       </label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
+                      <input
+                        type="text"
+                        className="form-control"
                         value={incentiveData.cp_name}
-                        onChange={(e) => setIncentiveData({...incentiveData, cp_name: e.target.value})}
+                        onChange={(e) => setIncentiveData({ ...incentiveData, cp_name: e.target.value })}
                         placeholder="Enter Channel Partner Name"
                         required
                       />
@@ -670,8 +669,8 @@ const ChannelPartnerIncentive = () => {
                         Mobile Number <span className="text-danger">*</span>
                       </label>
                       <div className="input-group">
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           className={`form-control ${mobileError ? 'is-invalid' : ''}`}
                           value={incentiveData.mobile}
                           onChange={(e) => handleMobileChange(e.target.value)}
@@ -679,8 +678,8 @@ const ChannelPartnerIncentive = () => {
                           maxLength={10}
                           required
                         />
-                        <button 
-                          type="button" 
+                        <button
+                          type="button"
                           className="btn btn-outline-primary"
                           onClick={() => alert("OTP validation feature will be implemented")}
                         >
@@ -702,8 +701,8 @@ const ChannelPartnerIncentive = () => {
                       <label className="form-label">
                         Email ID
                       </label>
-                      <input 
-                        type="email" 
+                      <input
+                        type="email"
                         className={`form-control ${emailError ? 'is-invalid' : ''}`}
                         value={incentiveData.email}
                         onChange={(e) => handleEmailChange(e.target.value)}
@@ -721,11 +720,11 @@ const ChannelPartnerIncentive = () => {
                       <label className="form-label">
                         CP Address <span className="text-danger">*</span>
                       </label>
-                      <textarea 
-                        className="form-control" 
+                      <textarea
+                        className="form-control"
                         rows={3}
                         value={incentiveData.cp_address}
-                        onChange={(e) => setIncentiveData({...incentiveData, cp_address: e.target.value})}
+                        onChange={(e) => setIncentiveData({ ...incentiveData, cp_address: e.target.value })}
                         placeholder="Enter Channel Partner Address"
                         required
                       />
@@ -736,14 +735,14 @@ const ChannelPartnerIncentive = () => {
                       <label className="form-label">
                         Image
                       </label>
-                      <input 
-                        type="file" 
-                        className="form-control" 
+                      <input
+                        type="file"
+                        className="form-control"
                         accept="image/*"
                         onChange={(e) => {
                           const file = e.target.files?.[0];
                           if (file) {
-                            setIncentiveData({...incentiveData, image: file.name});
+                            setIncentiveData({ ...incentiveData, image: file.name });
                           }
                         }}
                       />
@@ -755,11 +754,11 @@ const ChannelPartnerIncentive = () => {
                       <label className="form-label">
                         Brand <span className="text-danger">*</span>
                       </label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
+                      <input
+                        type="text"
+                        className="form-control"
                         value={incentiveData.brand}
-                        onChange={(e) => setIncentiveData({...incentiveData, brand: e.target.value})}
+                        onChange={(e) => setIncentiveData({ ...incentiveData, brand: e.target.value })}
                         placeholder="Enter brand name"
                         required
                       />
@@ -788,15 +787,15 @@ const ChannelPartnerIncentive = () => {
                         {incentiveData.incentive_type === "Fixed Amount" && (
                           <span className="input-group-text">₹</span>
                         )}
-                        <input 
-                          type="number" 
+                        <input
+                          type="number"
                           step="0.01"
                           className={`form-control ${incentiveFactorError ? 'is-invalid' : ''}`}
                           value={incentiveData.incentive_factor}
                           onChange={(e) => handleIncentiveFactorChange(e.target.value)}
                           placeholder={
-                            incentiveData.incentive_type === "Percentage" 
-                              ? "Enter percentage (0.00 - 99.99)" 
+                            incentiveData.incentive_type === "Percentage"
+                              ? "Enter percentage (0.00 - 99.99)"
                               : "Enter amount"
                           }
                           required
@@ -855,7 +854,7 @@ const ChannelPartnerIncentive = () => {
         </div>
       </div>
       {/* /Edit Channel Partner Incentive Modal */}
-      
+
       <DeleteModal />
     </>
   );

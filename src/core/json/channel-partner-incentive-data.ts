@@ -1,4 +1,4 @@
-const channelPartnerIncentiveData = [
+export const channelPartnerIncentiveData = [
   {
     cp_name: "Tech Solutions Pvt Ltd",
     mobile: "9876543210",
@@ -100,5 +100,3 @@ const channelPartnerIncentiveData = [
     incentive_factor: "2100.00"
   },
 ];
-
-export default channelPartnerIncentiveData;

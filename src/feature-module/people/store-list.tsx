@@ -31,7 +31,8 @@ const StoreList = () => {
     site_state: "",
     site_party_id: "",
     site_user_id: "",
-    site_cp_id: ""
+    site_cp_id: "",
+    removed_gst_field: ""
   });
 
   // OTP Validation state
@@ -109,6 +110,11 @@ const StoreList = () => {
 
   const validateEmail = (email: string) => {
     return email === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  // Temporary GST validation function - to be removed
+  const validateGST = (gst: string) => {
+    return gst.length === 15;
   };
 
   const sendOTP = () => {
@@ -645,12 +651,12 @@ const StoreList = () => {
                       <input 
                         type="text" 
                         className="form-control" 
-                        value={siteData.site_gstno}
-                        onChange={(e) => setSiteData({...siteData, site_gstno: e.target.value})}
+                        value={siteData.removed_gst_field}
+                        onChange={(e) => setSiteData({...siteData, removed_gst_field: e.target.value})}
                         placeholder="Enter 15-character GST number (optional)"
                         maxLength={15}
                       />
-                      {siteData.site_gstno && !validateGST(siteData.site_gstno) && (
+                      {siteData.removed_gst_field && !validateGST(siteData.removed_gst_field) && (
                         <small className="text-danger">GST number must be exactly 15 characters</small>
                       )}
                     </div>
@@ -1032,12 +1038,12 @@ const StoreList = () => {
                       <input 
                         type="text" 
                         className="form-control" 
-                        value={siteData.site_gstno}
-                        onChange={(e) => setSiteData({...siteData, site_gstno: e.target.value})}
+                        value={siteData.removed_gst_field}
+                        onChange={(e) => setSiteData({...siteData, removed_gst_field: e.target.value})}
                         placeholder="Enter 15-character GST number (optional)"
                         maxLength={15}
                       />
-                      {siteData.site_gstno && !validateGST(siteData.site_gstno) && (
+                      {siteData.removed_gst_field && !validateGST(siteData.removed_gst_field) && (
                         <small className="text-danger">GST number must be exactly 15 characters</small>
                       )}
                     </div>
