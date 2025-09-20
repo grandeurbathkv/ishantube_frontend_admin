@@ -165,7 +165,16 @@ const ChannelPartnerIncentive = () => {
             {data.cp_name?.charAt(0)?.toUpperCase() || 'C'}
           </div>
           <div>
-            <Link to="#" className="fw-medium">{data.cp_name}</Link>
+            <Link 
+              to="#" 
+              className={`fw-medium ${data.status ? 'text-success' : 'text-danger'}`}
+              style={{
+                color: data.status ? '#28a745' : '#dc3545',
+                textDecoration: 'none'
+              }}
+            >
+              {data.cp_name}
+            </Link>
           </div>
         </div>
       ),
@@ -236,6 +245,16 @@ const ChannelPartnerIncentive = () => {
           <small className="text-muted">{data.incentive_type}</small>
         </div>
       )
+    },
+    {
+      header: "Status",
+      field: "status",
+      key: "status",
+      body: (data: any) => (
+        <span className={`badge ${data.status ? 'bg-success' : 'bg-danger'}`}>
+          {data.status ? 'Active' : 'Inactive'}
+        </span>
+      ),
     },
     {
       header: "",

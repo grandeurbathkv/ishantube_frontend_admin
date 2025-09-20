@@ -1,10 +1,30 @@
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logoutUser } from '../../core/redux/authSlice';
+import type { AppDispatch } from "@/core/redux/store";
 import { customer15, logo, logoSmall, logoWhite } from "../../utils/imagepath";
 import { all_routes } from "../../routes/all_routes";
+import { useState } from "react";
 
 const TwoColumnSidebar = () => {
   const route = all_routes;
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  // Logout handler
+  const handleLogout = async () => {
+    try {
+      setLoading(true);
+      await dispatch(logoutUser() as any);
+      navigate('/signin');
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -1236,9 +1256,13 @@ const TwoColumnSidebar = () => {
                       </ul>
                     </li>
                     <li>
-                      <Link to={route.signin}>
-                        <span>Logout</span>{" "}
-                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        disabled={loading}
+                        style={{ border: 'none', background: 'none', color: 'inherit', textAlign: 'left', padding: '0' }}
+                      >
+                        <span>{loading ? 'Logging out...' : 'Logout'}</span>{" "}
+                      </button>
                     </li>
                   </ul>
                 </div>

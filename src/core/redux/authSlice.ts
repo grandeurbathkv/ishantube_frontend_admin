@@ -96,6 +96,32 @@ export const registerUser = createAsyncThunk<
   }
 );
 
+// Async thunk for user logout
+export const logoutUser = createAsyncThunk(
+  'auth/logoutUser',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('userToken');
+      const { data } = await axios.post(`${API_URL}/user/logout`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // Remove token from local storage
+      localStorage.removeItem('userToken');
+      return data;
+    } catch (error: any) {
+      // Even if API call fails, we should still clear local storage
+      localStorage.removeItem('userToken');
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -139,6 +165,25 @@ const authSlice = createSlice({
       .addCase(registerUser.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = payload;
+      })
+      // Logout cases
+      .addCase(logoutUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.loading = false;
+        state.userInfo = null;
+        state.userToken = null;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(logoutUser.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.userInfo = null;
+        state.userToken = null;
+        state.error = payload;
+        state.success = false;
       });
   },
 });

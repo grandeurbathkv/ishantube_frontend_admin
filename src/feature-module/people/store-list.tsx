@@ -229,6 +229,28 @@ const StoreList = () => {
       key: "checked",
     },
     { 
+      header: "Party Name", 
+      field: "site_party_id", 
+      key: "site_party_id",
+      body: (data: any) => (
+        <div className="d-flex align-items-center">
+          <div className="avatar avatar-md bg-primary text-white rounded-circle d-flex align-items-center justify-content-center">
+            {data.site_party_name?.charAt(0)?.toUpperCase() || data.site_party_id?.charAt(0)?.toUpperCase() || 'P'}
+          </div>
+          <div className="ms-2">
+            <p className="text-gray-9 mb-0">
+              <Link 
+                to="#" 
+                className={`fw-medium ${data.status === "Active" ? "text-success" : "text-danger"}`}
+              >
+                {data.site_party_name || data.site_party_id}
+              </Link>
+            </p>
+          </div>
+        </div>
+      ),
+    },
+    { 
       header: "Site Name", 
       field: "site_billing_name", 
       key: "site_billing_name",
@@ -260,7 +282,16 @@ const StoreList = () => {
     { header: "Supervisor", field: "site_supervisor_name", key: "site_supervisor_name" },
     { header: "City", field: "site_city", key: "site_city" },
     { header: "State", field: "site_state", key: "site_state" },
-    { header: "Party", field: "site_party_id", key: "site_party_id" },
+    { 
+      header: "Status", 
+      field: "status", 
+      key: "status",
+      body: (data: any) => (
+        <span className={`badge ${data.status === "Active" ? "bg-success" : "bg-danger"} text-white`}>
+          {data.status || "Inactive"}
+        </span>
+      )
+    },
     {
       header: "",
       field: "actions",

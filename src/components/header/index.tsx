@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser } from '../../core/redux/authSlice';
+import type { AppDispatch } from "@/core/redux/store";
 import { all_routes } from "../../routes/all_routes";
 import {
   arabicFlag,
@@ -25,9 +27,25 @@ import {
 } from "../../utils/imagepath";
 const Header = () => {
   const route = all_routes;
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const [toggle, SetToggle] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [flagImage, _setFlagImage] = useState(usFlag);
+  const [loading, setLoading] = useState(false);
+
+  // Logout handler
+  const handleLogout = async () => {
+    try {
+      setLoading(true);
+      await dispatch(logoutUser() as any);
+      navigate('/signin');
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   // const { t, i18n } = useTranslation();
   const changeLanguage = (_lng: any) => {
     // Debugging statement
@@ -699,10 +717,15 @@ const Header = () => {
                   Settings
                 </Link>
                 <hr className="my-2" />
-                <Link className="dropdown-item logout pb-0" to={route.signin}>
+                <button
+                  className="dropdown-item logout pb-0"
+                  onClick={handleLogout}
+                  disabled={loading}
+                  style={{ border: 'none', background: 'none', width: '100%', textAlign: 'left' }}
+                >
                   <i className="ti ti-logout me-2" />
-                  Logout
-                </Link>
+                  {loading ? 'Logging out...' : 'Logout'}
+                </button>
               </div>
             </li>
           </ul>
@@ -724,9 +747,14 @@ const Header = () => {
               <Link className="dropdown-item" to="generalsettings">
                 Settings
               </Link>
-              <Link className="dropdown-item" to="signin">
-                Logout
-              </Link>
+              <button
+                className="dropdown-item"
+                onClick={handleLogout}
+                disabled={loading}
+                style={{ border: 'none', background: 'none', width: '100%', textAlign: 'left' }}
+              >
+                {loading ? 'Logging out...' : 'Logout'}
+              </button>
             </div>
           </div>
           {/* /Mobile Menu */}

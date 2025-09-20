@@ -36,7 +36,6 @@ const PrimeDataTable: React.FC<Props> = ({
   sortable = true,
   footer = null,
   loading = false,
- 
   isPaginationEnabled = true,
 }) => {
   const skeletonRows = Array(rows).fill({});

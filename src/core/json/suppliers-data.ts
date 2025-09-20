@@ -13,6 +13,7 @@ export const suppliersData = [
     gst: "07AABCD1234M1ZP",
     rating: "4.5",
     createdOn: "2024-01-15",
+    status: true,
     action: ""
   },
   {
@@ -27,6 +28,7 @@ export const suppliersData = [
     gst: "27AABCD1234M1ZQ",
     rating: "4.2",
     createdOn: "2024-01-16",
+    status: false,
     action: ""
   },
   {
@@ -41,6 +43,7 @@ export const suppliersData = [
     gst: "29AABCD1234M1ZR",
     rating: "4.7",
     createdOn: "2024-01-17",
+    status: true,
     action: ""
   },
   {
@@ -55,6 +58,7 @@ export const suppliersData = [
     gst: "33AABCD1234M1ZS",
     rating: "4.0",
     createdOn: "2024-01-18",
+    status: false,
     action: ""
   },
   {
@@ -69,6 +73,7 @@ export const suppliersData = [
     gst: "19AABCD1234M1ZT",
     rating: "4.3",
     createdOn: "2024-01-19",
+    status: true,
     action: ""
   }
 ];

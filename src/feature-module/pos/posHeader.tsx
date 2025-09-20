@@ -1,12 +1,28 @@
 import  { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Tooltip } from 'antd';
 import { Settings, User } from 'react-feather';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser } from '../../core/redux/authSlice';
 import { all_routes } from '../../routes/all_routes';
 
 const PosHeader = () => {
 
   const [isFullscreen, ] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading } = useSelector((state: any) => state.auth);
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser() as any);
+      navigate(all_routes.signin);
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if API fails, redirect to login
+      navigate(all_routes.signin);
+    }
+  };
 
 
 
@@ -248,17 +264,26 @@ const PosHeader = () => {
                   Settings
                 </Link>
                 <hr className="m-0" />
-                <Link
+                <button
                   className="dropdown-item logout pb-0"
-                  to={all_routes.signin}
+                  onClick={handleLogout}
+                  disabled={loading}
+                  style={{ 
+                    background: 'none', 
+                    border: 'none', 
+                    padding: '8px 20px',
+                    textAlign: 'left',
+                    width: '100%',
+                    cursor: loading ? 'not-allowed' : 'pointer'
+                  }}
                 >
                   <img
                     src="src/assets/img/icons/log-out.svg"
                     className="me-2"
                     alt="img"
                   />
-                  Logout
-                </Link>
+                  {loading ? 'Logging out...' : 'Logout'}
+                </button>
               </div>
             </div>
           </li>
@@ -281,9 +306,21 @@ const PosHeader = () => {
             <Link className="dropdown-item" to={all_routes.generalsettings}>
               Settings
             </Link>
-            <Link className="dropdown-item" to={all_routes.signin}>
-              Logout
-            </Link>
+            <button
+              className="dropdown-item"
+              onClick={handleLogout}
+              disabled={loading}
+              style={{ 
+                background: 'none', 
+                border: 'none', 
+                padding: '8px 20px',
+                textAlign: 'left',
+                width: '100%',
+                cursor: loading ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {loading ? 'Logging out...' : 'Logout'}
+            </button>
           </div>
         </div>
         {/* /Mobile Menu */}

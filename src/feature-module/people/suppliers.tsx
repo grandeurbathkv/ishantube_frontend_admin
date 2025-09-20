@@ -217,8 +217,9 @@ const Suppliers = () => {
             {data.partyName?.charAt(0)?.toUpperCase() || 'P'}
           </div>
           <div className="ms-2">
-            <p className="text-gray-9 mb-0">
-              <Link to="#">{data.partyName}</Link>
+            <p className=" mb-0">
+              <Link to="#" className={`fw-medium ${data.status ? "text-success" : "text-danger"}`}>
+                {data.partyName}</Link>
             </p>
           </div>
         </div>
